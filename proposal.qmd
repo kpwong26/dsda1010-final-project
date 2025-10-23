@@ -14,18 +14,9 @@ The goal of my project is to study the impact of the influx in Generative Artifi
 
 # Research Questions
 
-List **two specific questions** that your data analysis will answer.
+1. What factors are most related to causing text to be marked as AI-generated misinformation?
 
-Example:
-1. How do housing prices vary across neighborhoods in NYC?
-2. What factors are most related to customer satisfaction scores?
-
-::: callout-tip
-### Tip
-Good questions are measurable, clear, and require data to answer.
-Avoid yes/no questions when possible.
-:::
-
+2. What is the probability that information marked as AI-generated misinformation is actually misinformation?
 
 # Data Source
 
