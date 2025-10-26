@@ -42,13 +42,8 @@ I will analyze and visualize the data by creating summary statistics and data vi
 
 # Expected Outcomes
 
-What do you expect to learn or show from this project?  
-List one or two possible insights, patterns, or conclusions.
+I expect to show from this project how there are specific trends that follow articles marked as potential AI-generated misinformation, such as lower readability scores. This could be because AI writing is seen as less readable than human writing because it lacks the personal voice seen in human writing and is more monotonous overall. These types of possibilities, if true, can help support the conclusion that there may be a need for more mindfulness in mediawriting in a dominating era of Gen AI.
 
-# References (if any)
+# References
 
-List any web pages, data sources, or references you consulted.
-
-Example:
-- NYC Open Data Portal: <https://opendata.cityofnewyork.us>
-- Kaggle Datasets: <https://www.kaggle.com/datasets>
+Kaggle Datasets: <https://www.kaggle.com/datasets>
