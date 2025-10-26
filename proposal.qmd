@@ -36,13 +36,7 @@ glimpse(misinformation_data)
 
 # Planned Methods
 
-Describe, in a few sentences, how you will analyze and visualize the
-data. You don’t need advanced methods---just explain your plan clearly.
-
-Examples:
-- Create summary statistics and visualizations to explore trends.  
-- Build an interactive dashboard using **R Shiny**.  
-- Combine two data sets by a common key (e.g., date or location).  
+I will analyze and visualize the data by creating summary statistics and data visualizations to explore any correlations between certain attributes of articles/posts marked as AI-generated versus articles/posts marked as human. I will use various graphs using R to visually represent these trends, and use histograms to show the frequency of misinformation. I will build an interactive dashboard using R Shiny to show these different visualizations.
 
 ---
 
@@ -50,13 +44,6 @@ Examples:
 
 What do you expect to learn or show from this project?  
 List one or two possible insights, patterns, or conclusions.
-
-::: callout-tip
-### Tip
-It’s okay if your results change later. This section shows that you
-have a reasonable plan and motivation.
-:::
-
 
 # References (if any)
 
