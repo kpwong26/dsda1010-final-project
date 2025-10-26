@@ -20,13 +20,19 @@ The goal of my project is to study the impact of the influx in Generative Artifi
 
 # Data Source
 
-Describe the publicly available data you plan to use.
+**Gen AI Misinformation Detection Data (2024-2025)**: <https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025>
 
-For each source, include:
-- **Name and URL**  
-- **What it contains** (variables, number of rows/columns if known)  
-- **Why it is useful** for your project  
+```{r}
+library(tidyverse)
 
+misinformation_data <- read.csv("generative_ai_misinformation_dataset.csv")
+
+glimpse(misinformation_data)
+```
+
+**What it contains**: This dataset contains 500 rows and 31 columns. There are 31 different variables, and each row represents information on a single post/article and if it is misinformation or not.
+
+**Why it is useful**: This dataset is useful for my project because each article/post is identified with a certain model signature, which indicates whether the article/post has been marked as AI-generated or written by a person. The dataset also includes attributes of each article/post. With both of these values, I can compare the attributes of articles/posts marked as AI-generated to those marked as human to explore if there are any patterns for writings being marked as AI-generated and the frequency of misinformation.
 
 # Planned Methods
 
