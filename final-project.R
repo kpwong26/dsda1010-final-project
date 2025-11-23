@@ -19,14 +19,48 @@ ui <- dashboardPage(
     )
   ),
   dashboardBody(
-    fluidRow(
+    tabItems(
+
+      tabItem(
+        tabName = "histogram",
+        fluidRow(
+          box(
+            title = "Misinformation Frequency in Model Signatures",
+            status = "primary",
+            solidHeader = TRUE,
+            plotOutput("misinfo_hist")
+          ),
+      
       box(
-        title = ""
+        title = "Model Signatures",
+        status = "warning",
+        solidHeader = TRUE,
+        selectInput("model", "Select a Model Signature",
+        choices = c("All", unique(gen_ai$model_signature)))))
       )
     )
   )
 )
 
-server <- function(input, output) { }
+server <- function(input, output) {
+
+  output$misinfo_hist <- renderPlot({
+
+    filtered <- gen_ai
+    if (input$model != "All") {
+      filtered <- filtered %>%
+        filter(model_signature == input$model)
+    }
+    
+    ggplot(filtered, aes(x = is_misinformation)) +
+      geom_bar(width = 0.9) +
+      labs(
+        x = "Misinformation?",
+        y = "Count",
+        title = paste("Misinformation for", input$model)
+      )
+  })
+
+}
 
 shinyApp(ui, server)
