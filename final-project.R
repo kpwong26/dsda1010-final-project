@@ -96,9 +96,29 @@ ui <- dashboardPage(skin = "purple",
             title = "Model Signatures",
             status = "primary",
             solidHeader = TRUE,
-            width = 12,
+            width = 6,
             checkboxGroupInput("modelmap", "Select Model Signatures", choices = unique(gen_ai$model_signature)), selected = unique(gen_ai$model_signature)
-          )
+          ),
+          box(
+            title = "Country",
+            status = "primary",
+            solidHeader = TRUE,
+            width = 6,
+            virtualSelectInput(
+              "countryselect",
+              "Select a Country",
+              choices = c("All", unique(gen_ai$country)),
+              multiple = FALSE,
+              search = TRUE,
+              placeholder = "Select a country"
+            ),
+            virtualSelectInput(
+              "cityselect",
+              label = "Select a City",
+              choices = c("All"),
+              multiple = TRUE,
+              search = TRUE,
+              placeholder = "Select city/cities"))
         )
       )
     )
@@ -106,7 +126,7 @@ ui <- dashboardPage(skin = "purple",
 )
 
 # server
-server <- function(input, output) {
+server <- function(input, output, session) {
 
   # filtered data for histogram tab
   filtered <- reactive({
@@ -161,6 +181,29 @@ server <- function(input, output) {
     "0 = Authentic Information | 1 = Misinformation"
   })
 
+  # city and country selection
+  observe({
+    req(input$countryselect)
+
+    if (input$countryselect == "All") {
+      cities <- unique(gen_ai$city)
+    } else {
+      cities <- gen_ai %>%
+        filter(country == input$countryselect) %>%
+        pull(city) %>%
+        unique()
+    }
+
+    cities <- c("All", as.character(sort(cities)))
+
+    updateVirtualSelect(
+      session = session,
+      "cityselect",
+      choices = cities,
+      selected = "All"
+    )
+  })
+
   # misinformation by city
   city_data <- reactive({
     data <- gen_ai
@@ -168,6 +211,16 @@ server <- function(input, output) {
     # model signature filter
     if (!is.null(input$modelmap)) {
       data <- data %>% filter(model_signature %in% input$modelmap)
+    }
+
+    # country filter
+    if (!is.null(input$countryselect) && input$countryselect != "All") {
+      data <- data %>% filter(country == input$countryselect)
+    }
+
+    # city filter
+    if(!is.null(input$cityselect) && !"All" %in% input$cityselect) {
+      data <- data %>% filter(city %in% input$cityselect)
     }
 
     data %>%
