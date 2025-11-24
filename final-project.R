@@ -84,26 +84,28 @@ ui <- dashboardPage(skin = "purple",
       tabItem(
         tabName = "map",
         fluidRow(
+          column(
+          width = 8,
           box(
             title = "Misinformation Detected Globally",
             status = "primary",
             width = 12,
             leafletOutput("worldmap", height = 600)
-          )
-        ),
-        fluidRow(
-          box(
-            title = "Model Signatures",
-            status = "primary",
-            solidHeader = TRUE,
-            width = 6,
-            checkboxGroupInput("modelmap", "Select Model Signatures", choices = unique(gen_ai$model_signature)), selected = unique(gen_ai$model_signature)
-          ),
+          )),
+          column(
+            width = 4,
+            box(
+              title = "Model Signatures",
+              status = "primary",
+              solidHeader = TRUE,
+              width = 12,
+              checkboxGroupInput("modelmap", "Select Model Signatures", choices = unique(gen_ai$model_signature)), selected = unique(gen_ai$model_signature)
+            ),
           box(
             title = "Country",
             status = "primary",
             solidHeader = TRUE,
-            width = 6,
+            width = 12,
             virtualSelectInput(
               "countryselect",
               "Select a Country",
@@ -119,6 +121,23 @@ ui <- dashboardPage(skin = "purple",
               multiple = TRUE,
               search = TRUE,
               placeholder = "Select city/cities"))
+        )),
+        fluidRow(
+          column(
+          width = 7,
+          box(
+            title = "Misinformation Frequency by Location",
+            status = "primary",
+            solidHeader = TRUE,
+            width = 12,
+            plotOutput("misinfo_location")),
+          textOutput("keytxt2")
+          ),
+          column(
+            width = 5,
+            valueBoxOutput("location_misinfo_count", width = 12),
+            valueBoxOutput("location_notmisinfo_count", width = 12)
+          )
         )
       )
     )
@@ -176,7 +195,8 @@ server <- function(input, output, session) {
       color = "olive"
     )
   })
-
+  
+  # legend for histogram
   output$keytxt <- renderText({
     "0 = Authentic Information | 1 = Misinformation"
   })
@@ -250,6 +270,85 @@ server <- function(input, output, session) {
         ) %>% lapply(htmltools::HTML)
       )
   })
+
+  # histogram by location
+  hist_data <- reactive({
+    data <- gen_ai
+
+    if(!is.null(input$modelmap)) {
+      data <- data %>% filter(model_signature %in% input$modelmap)
+    }
+
+    if(!is.null(input$countryselect) && input$countryselect != "All") {
+      data <- data %>% filter(country == input$countryselect)
+    }
+
+    if (!is.null(input$cityselect) && !"All" %in% input$cityselect) {
+      data <- data %>% filter(city %in% input$cityselect)
+    }
+
+    data
+  })
+
+  output$misinfo_location <- renderPlot({
+    data <- hist_data()
+
+    title_text <- "Misinformation Frequency"
+
+    if(!is.null(input$countryselect) && input$countryselect != "All") {
+      title_text <- paste(title_text, "in", input$countryselect)
+    }
+
+    if(!is.null(input$cityselect) && !"All" %in% input$cityselect) {
+      cities <- paste(input$cityselect, collapse = ", ")
+      title_text <- paste(title_text, "for", cities)
+    }
+
+    ggplot(data, aes(is_misinformation)) +
+      geom_bar(fill = "grey50", width = 0.8) +
+      labs(
+        x = "Misinformation vs. Authentic Cases",
+        y = "Count",
+        title = title_text
+      )
+  })
+
+  # legend for location histogram
+  output$keytxt2 <- renderText({
+    "0 = Authentic Information | 1 = Misinformation"
+  })
+
+  # location value boxes
+  output$location_misinfo_count <- renderValueBox({
+    data <- hist_data()
+
+    location_count_yes <- sum(data$is_misinformation == "1")
+    location_total <- nrow(data)
+    location_percent_yes <- ifelse(location_total > 0, round((location_count_yes / location_total) * 100, 1), 0)
+
+    valueBox(
+      value = paste0(location_count_yes, " (", location_percent_yes, "%)"),
+      subtitle = "Number of Misinformation Cases",
+      icon = icon("triangle-exclamation"),
+      color = "red"
+    )
+  })
+
+  output$location_notmisinfo_count <- renderValueBox({
+    data <- hist_data()
+    
+    location_count_no <- sum(data$is_misinformation == "0")
+    location_total <- nrow(data)
+    location_percent_no <- ifelse(location_total > 0, round((location_count_no / location_total) * 100, 1), 0)
+
+    valueBox(
+      value = paste0(location_count_no, " (", location_percent_no, "%)"),
+      subtitle = "Number of Authentic Information Cases",
+      icon = icon("circle-check"),
+      color = "olive"
+    )
+  })
+
 }
 
 # run app
