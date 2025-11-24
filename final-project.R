@@ -3,11 +3,12 @@ library(tidyverse)
 library(shiny)
 library(shinydashboard)
 library(leaflet)
+library(shinyWidgets)
 
-# Load dataset
+# load dataset
 gen_ai <- read.csv("generative_ai_misinformation_dataset.csv")
 
-# Add latitude and longitude for cities (correct longitudes for western hemisphere)
+# add latitude and longitude for cities
 gen_ai <- gen_ai %>%
   mutate(location = case_when(
     city == "New York" ~ "40.7128, -74.006",
@@ -32,7 +33,7 @@ gen_ai <- gen_ai %>%
     longitude = as.numeric(longitude)
   )
 
-# UI
+# ui
 ui <- dashboardPage(skin = "purple",
   dashboardHeader(
     titleWidth = 400,
@@ -48,7 +49,7 @@ ui <- dashboardPage(skin = "purple",
   ),
   dashboardBody(
     tabItems(
-      # Histogram tab
+      # misinformation frequency histogram
       tabItem(
         tabName = "histogram",
         fluidRow(
@@ -79,7 +80,7 @@ ui <- dashboardPage(skin = "purple",
         )
       ),
 
-      # Map tab
+      # world map
       tabItem(
         tabName = "map",
         fluidRow(
@@ -89,16 +90,25 @@ ui <- dashboardPage(skin = "purple",
             width = 12,
             leafletOutput("worldmap", height = 600)
           )
+        ),
+        fluidRow(
+          box(
+            title = "Model Signatures",
+            status = "primary",
+            solidHeader = TRUE,
+            width = 12,
+            checkboxGroupInput("modelmap", "Select Model Signatures", choices = unique(gen_ai$model_signature)), selected = unique(gen_ai$model_signature)
+          )
         )
       )
     )
   )
 )
 
-# Server
+# server
 server <- function(input, output) {
 
-  # Filtered data for histogram tab
+  # filtered data for histogram tab
   filtered <- reactive({
     data <- gen_ai
     if (input$model != "All") {
@@ -107,7 +117,7 @@ server <- function(input, output) {
     data
   })
 
-  # Histogram
+  # misinformation frequency histogram
   output$misinfo_hist <- renderPlot({
     ggplot(filtered(), aes(x = is_misinformation)) +
       geom_bar(fill = "grey50", width = 0.9) +
@@ -118,7 +128,7 @@ server <- function(input, output) {
       )
   })
 
-  # Value boxes with count and percentage
+  # value boxes with count and percentage
   output$misinfo_count <- renderValueBox({
     data <- filtered()
     count_yes <- sum(data$is_misinformation == "1")
@@ -151,32 +161,43 @@ server <- function(input, output) {
     "0 = Authentic Information | 1 = Misinformation"
   })
 
-  # Prepare city-level data for map
+  # misinformation by city
   city_data <- reactive({
-    gen_ai %>%
+    data <- gen_ai
+
+    # model signature filter
+    if (!is.null(input$modelmap)) {
+      data <- data %>% filter(model_signature %in% input$modelmap)
+    }
+
+    data %>%
       filter(!is.na(latitude) & !is.na(longitude)) %>%
       group_by(city, latitude, longitude) %>%
-      summarise(count = sum(is_misinformation == "1"), .groups = "drop")
+      summarise(
+        misinfo = sum(is_misinformation == "1"),
+        authentic = sum(is_misinformation == "0"),
+        .groups = "drop"
+      )
   })
 
-  # Base map
+  # world map
   output$worldmap <- renderLeaflet({
     data <- city_data()
 
     leaflet(data) %>%
       setView(lng = 0, lat = 20, zoom = 2) %>%
       addProviderTiles("OpenStreetMap.Mapnik") %>%
-      addCircleMarkers(
+      addMarkers(
         lng = ~longitude,
         lat = ~latitude,
-        radius = ~sqrt(count)*3,    # scale by number of cases
-        color = "red",
-        stroke = TRUE,
-        fillOpacity = 0.6,
-        label = ~paste0(city, ": ", count, " misinformation cases")
+        label = ~paste0(
+          city, "<br>",
+          "Misinformation: ", misinfo, "<br>",
+          "Authentic: ", authentic
+        ) %>% lapply(htmltools::HTML)
       )
   })
 }
 
-# Run app
+# run app
 shinyApp(ui, server)
