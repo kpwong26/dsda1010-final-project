@@ -77,7 +77,7 @@ ui <- dashboardPage(skin = "purple",
             width = 5,
             box(
               title = "Model Signatures",
-              status = "primary",
+              status = "warning",
               solidHeader = TRUE,
               width = 12,
               selectInput("model", "Select a Model Signature",
@@ -105,14 +105,14 @@ ui <- dashboardPage(skin = "purple",
             width = 4,
             box(
               title = "Model Signatures",
-              status = "primary",
+              status = "warning",
               solidHeader = TRUE,
               width = 12,
-              checkboxGroupInput("modelmap", "Select Model Signatures", choices = unique(gen_ai$model_signature)), selected = unique(gen_ai$model_signature)
+              checkboxGroupInput("modelmap", "Select Model Signatures", choices = unique(gen_ai$model_signature), selected = unique(gen_ai$model_signature))
             ),
           box(
             title = "Country",
-            status = "primary",
+            status = "warning",
             solidHeader = TRUE,
             width = 12,
             virtualSelectInput(
@@ -172,7 +172,7 @@ ui <- dashboardPage(skin = "purple",
           width = 6,
           box(
             title = "Select an Attribute",
-            status = "primary",
+            status = "warning",
             solidHeader = TRUE,
             width = 12,
             selectInput("attribute", "Select an attribute", choices = c("readability_score", "sentiment_score", "toxicity_score", "token_count"))
@@ -181,14 +181,14 @@ ui <- dashboardPage(skin = "purple",
             width = 6,
             box(
               title = "AI Writing Statistics",
-              status = "primary",
+              status = "info",
               solidHeader = TRUE,
               width = 12,
               tableOutput("ai_writing_stats")
             ),
             box(
               title = "Human Writing Statistics",
-              status = "primary",
+              status = "info",
               solidHeader = TRUE,
               width = 12,
               tableOutput("human_writing_stats")))
@@ -203,6 +203,7 @@ ui <- dashboardPage(skin = "purple",
           box(
             title = "Sample of Data",
             width = 12,
+            status = "primary",
             DT::dataTableOutput("data_head")
           ),
           uiOutput("kaggle")
@@ -226,13 +227,13 @@ ui <- dashboardPage(skin = "purple",
             box(
               title = "Model Signatures",
               width = 12,
-              status = "primary",
+              status = "warning",
               solidHeader = TRUE,
               selectInput("model_2", "Select a Model Signature", choices = c("All", unique(gen_ai$model_signature)))
             ),
             box(
             title = "Country",
-            status = "primary",
+            status = "warning",
             solidHeader = TRUE,
             width = 12,
             virtualSelectInput(
@@ -249,10 +250,9 @@ ui <- dashboardPage(skin = "purple",
               choices = c("All"),
               multiple = TRUE,
               search = TRUE,
-              placeholder = "Select city/cities"),
+              placeholder = "Select city/cities")),
             valueBoxOutput("misinfo_engagement_count", width = 12),
             valueBoxOutput("authentic_engagement_count", width = 12)
-            )
           )
         )
       )
@@ -404,7 +404,13 @@ server <- function(input, output, session) {
   output$misinfo_location <- renderPlot({
     data <- bar_data()
 
-    title_text <- "Misinformation Frequency"
+    if (length(input$modelmap) == length(unique(gen_ai$model_signature))) {
+      model_text <- "All Models"
+    } else {
+      model_text <- paste(input$modelmap, collapse = ", ")
+    }
+
+    title_text <- paste("Misinformation Frequency for", model_text)
 
     if(!is.null(input$countryselect) && input$countryselect != "All") {
       title_text <- paste(title_text, "in", input$countryselect)
@@ -461,7 +467,10 @@ server <- function(input, output, session) {
       filter(model_signature == "GPT-like") %>%
       ggplot(aes(x = factor(is_misinformation), y = !!sym(input$attribute))) +
       geom_boxplot() +
-      stat_summary()
+      stat_summary() +
+      labs(
+        x = "Authentic vs. Misinformation Cases"
+      )
   })
 
   # human writing boxplot
@@ -470,7 +479,10 @@ server <- function(input, output, session) {
       filter(model_signature == "human") %>%
       ggplot(aes(x = factor(is_misinformation), y = !!sym(input$attribute))) +
       geom_boxplot() +
-      stat_summary()
+      stat_summary() +
+      labs(
+        x = "Authentic vs. Misinformation Cases"
+      )
   })
 
   # boxplot statistics
@@ -549,6 +561,102 @@ server <- function(input, output, session) {
   output$kaggle <- renderUI({
     HTML('Data taken from <a href="https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025"target="_blank">Gen AI Misinformation Detection Data (2024–2025)</a> by Atharva Soundankar on Kaggle.')
 })
+  
+  # engagement with content column chart
+  engagement_data <- reactive({
+    data <- gen_ai
+    
+    if(input$model_2 != "All") {
+      data <- data %>% filter(model_signature == input$model_2)
+    }
+
+    if(!is.null(input$countryselect_2) && input$countryselect_2 != "All") {
+      data <- data %>% filter(country == input$countryselect_2)
+    }
+
+    if (!is.null(input$cityselect_2) && !"All" %in% input$cityselect_2) {
+      data <- data %>% filter(city %in% input$cityselect_2)
+    }
+
+    data
+  })
+
+  observe({
+    req(input$countryselect_2)
+
+    if(input$countryselect_2 == "All") {
+      cities <- unique(gen_ai$city)
+    } else {
+      cities <- gen_ai %>%
+        filter(country == input$countryselect_2) %>%
+        pull(city) %>%
+        unique()
+    }
+
+    cities <- c("All", as.character(sort(cities)))
+
+    updateVirtualSelect(
+      session = session,
+      "cityselect_2",
+      choices = cities,
+      selected = "All"
+    )
+  })
+
+  output$engagement_col <- renderPlot({
+    data <- engagement_data()
+
+    if (length(input$model_2) == length(unique(gen_ai$model_signature))) {
+      model_text2 <- "All Models"
+    } else {
+      model_text2 <- paste(input$model_2, collapse = ", ")
+    }
+
+    title_text2 <- paste("Misinformation Frequency for", model_text2)
+
+    if(!is.null(input$countryselect_2) && input$countryselect_2 != "All") {
+      title_text2 <- paste(title_text2, "in", input$countryselect_2)
+    }
+
+    if(!is.null(input$cityselect_2) && !"All" %in% input$cityselect_2) {
+      cities <- paste(input$cityselect_2, collapse = ", ")
+      title_text2 <- paste(title_text2, "for", cities)
+    }
+
+    ggplot(data, aes(x = is_misinformation, y = engagement / 1000)) +
+      geom_col(fill = "grey50") +
+      labs(
+        title = title_text2,
+        x = "Misinformation vs. Authentic Information",
+        y = "Engagement (in thousands)"
+      )
+  })
+
+  output$misinfo_engagement_count <- renderValueBox({
+    data <- engagement_data()
+
+    misinfo_total <- sum(data$engagement[data$is_misinformation == "Misinformation"])
+
+    valueBox(
+      value = misinfo_total,
+      subtitle = "Total Engagement with Misinformation Content",
+      icon = icon("flag"),
+      color = "red"
+    )
+  })
+
+  output$authentic_engagement_count <- renderValueBox({
+    data <- engagement_data()
+
+    authentic_total <- sum(data$engagement[data$is_misinformation == "Authentic"])
+
+    valueBox(
+      value = authentic_total,
+      subtitle = "Total Engagement with Authentic Information Content",
+      icon = icon("thumbs-up"),
+      color = "green"
+    )
+  })
 
 }
 
