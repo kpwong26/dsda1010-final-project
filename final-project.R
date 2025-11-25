@@ -4,6 +4,7 @@ library(shiny)
 library(shinydashboard)
 library(leaflet)
 library(shinyWidgets)
+library(DT)
 
 # load dataset
 gen_ai <- read.csv("generative_ai_misinformation_dataset.csv")
@@ -44,7 +45,8 @@ ui <- dashboardPage(skin = "purple",
       menuItem("Sample of Data", tabName = "data", icon = icon("database")),
       menuItem("Detected Gen AI Misinformation Around the World", tabName = "map", icon = icon("map-location-dot")),
       menuItem("Misinformation Detection Frequency", tabName = "histogram", icon = icon("chart-column")),
-      menuItem("Factors of Misinformation Detection", tabName = "boxplot", icon = icon("chart-line"))
+      menuItem("Attributes of Misinformation Detection", tabName = "boxplot", icon = icon("chart-line")),
+      menuItem("Final Presentation & Report", tabName = "report", icon = icon("file-lines"))
     )
   ),
   dashboardBody(
@@ -137,6 +139,65 @@ ui <- dashboardPage(skin = "purple",
             width = 5,
             valueBoxOutput("location_misinfo_count", width = 12),
             valueBoxOutput("location_notmisinfo_count", width = 12)
+          )
+        )
+      ),
+      
+      # boxplot
+      tabItem(
+        tabName = "boxplot",
+        fluidRow(
+          box(
+            title = "Attributes of AI Writing",
+            status = "primary",
+            solidHeader = TRUE,
+            width = 6,
+            plotOutput("ai_writing")
+          ),
+          box(
+            title = "Attributes of Human Writing",
+            status = "primary",
+            solidHeader = TRUE,
+            width = 6,
+            plotOutput("human_writing")
+          ),
+        fluidRow(
+          column(
+          width = 6,
+          box(
+            title = "Select an Attribute",
+            status = "primary",
+            solidHeader = TRUE,
+            width = 12,
+            selectInput("attribute", "Select an attribute", choices = c("readability_score", "sentiment_score", "toxicity_score", "token_count"))
+          )),
+          column(
+            width = 6,
+            box(
+              title = "AI Writing Statistics",
+              status = "primary",
+              solidHeader = TRUE,
+              width = 12,
+              tableOutput("ai_writing_stats")
+            ),
+            box(
+              title = "Human Writing Statistics",
+              status = "primary",
+              solidHeader = TRUE,
+              width = 12,
+              tableOutput("human_writing_stats")))
+          )
+        )
+      ),
+
+      # data sample
+      tabItem(
+        tabName = "data",
+        fluidRow(
+          box(
+            title = "Sample of Data",
+            width = 12,
+            DT::dataTableOutput("data_head")
           )
         )
       )
@@ -349,6 +410,96 @@ server <- function(input, output, session) {
     )
   })
 
+  # ai writing boxplot
+  output$ai_writing <- renderPlot({
+    gen_ai %>%
+      filter(model_signature == "GPT-like") %>%
+      ggplot(aes(x = factor(is_misinformation), y = !!sym(input$attribute))) +
+      geom_boxplot() +
+      stat_summary()
+  })
+
+  # human writing boxplot
+  output$human_writing <- renderPlot({
+    gen_ai %>%
+      filter(model_signature == "human") %>%
+      ggplot(aes(x = factor(is_misinformation), y = !!sym(input$attribute))) +
+      geom_boxplot() +
+      stat_summary()
+  })
+
+  # boxplot statistics
+  output$ai_writing_stats <- renderTable({
+    req(input$attribute)
+
+    ai_authentic_info_stats <- gen_ai %>%
+      filter(model_signature == "GPT-like" & is_misinformation == "0") %>%
+      summarize(
+        Group = "Authentic Information (0)",
+        Q1 = quantile(.data[[input$attribute]], 0.25),
+        Median = median(.data[[input$attribute]]),
+        Mean = mean(.data[[input$attribute]]),
+        Q3 = quantile(.data[[input$attribute]], 0.75),
+        Min = min(.data[[input$attribute]]),
+        Max = max(.data[[input$attribute]])
+      )
+    
+    ai_misinfo_stats <- gen_ai %>%
+      filter(model_signature == "GPT-like" & is_misinformation == "1") %>%
+      summarize(
+        Group = "Misinformation (1)",
+        Q1 = quantile(.data[[input$attribute]], 0.25),
+        Median = median(.data[[input$attribute]]),
+        Mean = mean(.data[[input$attribute]]),
+        Q3 = quantile(.data[[input$attribute]], 0.75),
+        Min = min(.data[[input$attribute]]),
+        Max = max(.data[[input$attribute]])
+      )
+    
+    bind_rows(ai_authentic_info_stats, ai_misinfo_stats)
+  })
+
+  output$human_writing_stats <- renderTable({
+    req(input$attribute)
+
+    human_authentic_info_stats <- gen_ai %>%
+      filter(model_signature == "human" & is_misinformation == "0") %>%
+      summarize(
+        Group = "Authentic Information (0)",
+        Q1 = quantile(.data[[input$attribute]], 0.25),
+        Median = median(.data[[input$attribute]]),
+        Mean = mean(.data[[input$attribute]]),
+        Q3 = quantile(.data[[input$attribute]], 0.75),
+        Min = min(.data[[input$attribute]]),
+        Max = max(.data[[input$attribute]])
+      )
+    
+    human_misinfo_stats <- gen_ai %>%
+      filter(model_signature == "human" & is_misinformation == "1") %>%
+      summarize(
+        Group = "Misinformation (1)",
+        Q1 = quantile(.data[[input$attribute]], 0.25),
+        Median = median(.data[[input$attribute]]),
+        Mean = mean(.data[[input$attribute]]),
+        Q3 = quantile(.data[[input$attribute]], 0.75),
+        Min = min(.data[[input$attribute]]),
+        Max = max(.data[[input$attribute]])
+      )
+    
+    bind_rows(human_authentic_info_stats, human_misinfo_stats)
+  })
+
+  # data sample
+  output$data_head <- DT::renderDataTable({
+    DT::datatable(
+      gen_ai,
+      options = list(
+        pageLength = 10,
+        scrollX = TRUE,
+        autoWidth = TRUE
+      )
+    )
+  })
 }
 
 # run app
