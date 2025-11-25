@@ -49,7 +49,7 @@ ui <- dashboardPage(skin = "purple",
   dashboardSidebar(
     width = 375,
     sidebarMenu(
-      menuItem("Sample of Data", tabName = "data", icon = icon("database")),
+      menuItem("Overview of Data", tabName = "data", icon = icon("database")),
       menuItem("Detected Misinformation Around the World", tabName = "map", icon = icon("map-location-dot")),
       menuItem("Engagement with Content", tabName = "engagement", icon = icon("user")),
       menuItem("Misinformation Detection Frequency", tabName = "barchart", icon = icon("chart-column")),
@@ -68,7 +68,6 @@ ui <- dashboardPage(skin = "purple",
             box(
               title = "Misinformation Frequency in Model Signatures",
               status = "primary",
-              solidHeader = TRUE,
               width = 12,
               plotOutput("misinfo_hist")
             ),
@@ -156,14 +155,12 @@ ui <- dashboardPage(skin = "purple",
           box(
             title = "Attributes of AI Writing",
             status = "primary",
-            solidHeader = TRUE,
             width = 6,
             plotOutput("ai_writing")
           ),
           box(
             title = "Attributes of Human Writing",
             status = "primary",
-            solidHeader = TRUE,
             width = 6,
             plotOutput("human_writing")
           ),
@@ -201,9 +198,10 @@ ui <- dashboardPage(skin = "purple",
         tabName = "data",
         fluidRow(
           box(
-            title = "Sample of Data",
+            title = "Overview of Data",
             width = 12,
             status = "primary",
+            solidHeader = TRUE,
             DT::dataTableOutput("data_head")
           ),
           uiOutput("kaggle")
