@@ -51,7 +51,7 @@ ui <- dashboardPage(skin = "purple",
     sidebarMenu(
       menuItem("Sample of Data", tabName = "data", icon = icon("database")),
       menuItem("Detected Misinformation Around the World", tabName = "map", icon = icon("map-location-dot")),
-      menuItem("Engagement with Misinformation", tabName = "engagement", icon = icon("user")),
+      menuItem("Engagement with Content", tabName = "engagement", icon = icon("user")),
       menuItem("Misinformation Detection Frequency", tabName = "barchart", icon = icon("chart-column")),
       menuItem("Attributes of Misinformation Detection", tabName = "boxplot", icon = icon("chart-line")),
       menuItem("Final Presentation & Report", tabName = "report", icon = icon("file-lines"))
@@ -216,7 +216,7 @@ ui <- dashboardPage(skin = "purple",
           column(
             width = 7,
             box(
-              title = "Engagement with Misinformation",
+              title = "Engagement with Content",
               width = 12,
               status = "primary",
               plotOutput("engagement_col")
@@ -228,7 +228,7 @@ ui <- dashboardPage(skin = "purple",
               width = 12,
               status = "primary",
               solidHeader = TRUE,
-              selectInput("model_2", "Select a Model Signature", choies = c("All", unique(gen_ai$model_signature)))
+              selectInput("model_2", "Select a Model Signature", choices = c("All", unique(gen_ai$model_signature)))
             ),
             box(
             title = "Country",
@@ -249,7 +249,9 @@ ui <- dashboardPage(skin = "purple",
               choices = c("All"),
               multiple = TRUE,
               search = TRUE,
-              placeholder = "Select city/cities")
+              placeholder = "Select city/cities"),
+            valueBoxOutput("misinfo_engagement_count", width = 12),
+            valueBoxOutput("authentic_engagement_count", width = 12)
             )
           )
         )
