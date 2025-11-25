@@ -50,7 +50,8 @@ ui <- dashboardPage(skin = "purple",
     width = 375,
     sidebarMenu(
       menuItem("Sample of Data", tabName = "data", icon = icon("database")),
-      menuItem("Detected Gen AI Misinformation Around the World", tabName = "map", icon = icon("map-location-dot")),
+      menuItem("Detected Misinformation Around the World", tabName = "map", icon = icon("map-location-dot")),
+      menuItem("Engagement with Misinformation", tabName = "engagement", icon = icon("user")),
       menuItem("Misinformation Detection Frequency", tabName = "barchart", icon = icon("chart-column")),
       menuItem("Attributes of Misinformation Detection", tabName = "boxplot", icon = icon("chart-line")),
       menuItem("Final Presentation & Report", tabName = "report", icon = icon("file-lines"))
@@ -205,6 +206,52 @@ ui <- dashboardPage(skin = "purple",
             DT::dataTableOutput("data_head")
           ),
           uiOutput("kaggle")
+        )
+      ),
+
+      # engagement column chart
+      tabItem(
+        tabName = "engagement",
+        fluidRow(
+          column(
+            width = 7,
+            box(
+              title = "Engagement with Misinformation",
+              width = 12,
+              status = "primary",
+              plotOutput("engagement_col")
+            )),
+          column(
+            width = 5,
+            box(
+              title = "Model Signatures",
+              width = 12,
+              status = "primary",
+              solidHeader = TRUE,
+              selectInput("model_2", "Select a Model Signature", choies = c("All", unique(gen_ai$model_signature)))
+            ),
+            box(
+            title = "Country",
+            status = "primary",
+            solidHeader = TRUE,
+            width = 12,
+            virtualSelectInput(
+              "countryselect_2",
+              "Select a Country",
+              choices = c("All", unique(gen_ai$country)),
+              multiple = FALSE,
+              search = TRUE,
+              placeholder = "Select a country"
+            ),
+            virtualSelectInput(
+              "cityselect_2",
+              label = "Select a City",
+              choices = c("All"),
+              multiple = TRUE,
+              search = TRUE,
+              placeholder = "Select city/cities")
+            )
+          )
         )
       )
     )
