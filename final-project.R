@@ -198,7 +198,8 @@ ui <- dashboardPage(skin = "purple",
             title = "Sample of Data",
             width = 12,
             DT::dataTableOutput("data_head")
-          )
+          ),
+          uiOutput("kaggle")
         )
       )
     )
@@ -500,6 +501,11 @@ server <- function(input, output, session) {
       )
     )
   })
+
+  output$kaggle <- renderUI({
+    HTML('Data taken from <a href="https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025"target="_blank">Gen AI Misinformation Detection Data (2024–2025)</a> by Atharva Soundankar on Kaggle.')
+})
+
 }
 
 # run app
