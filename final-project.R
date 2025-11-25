@@ -520,7 +520,7 @@ server <- function(input, output, session) {
     human_authentic_info_stats <- gen_ai %>%
       filter(model_signature == "human" & is_misinformation == "Authentic") %>%
       summarize(
-        Group = "Authentic Information (0)",
+        Group = "Authentic Information",
         Q1 = quantile(.data[[input$attribute]], 0.25),
         Median = median(.data[[input$attribute]]),
         Mean = mean(.data[[input$attribute]]),
@@ -532,7 +532,7 @@ server <- function(input, output, session) {
     human_misinfo_stats <- gen_ai %>%
       filter(model_signature == "human" & is_misinformation == "Misinformation") %>%
       summarize(
-        Group = "Misinformation (1)",
+        Group = "Misinformation",
         Q1 = quantile(.data[[input$attribute]], 0.25),
         Median = median(.data[[input$attribute]]),
         Mean = mean(.data[[input$attribute]]),
