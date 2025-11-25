@@ -34,6 +34,13 @@ gen_ai <- gen_ai %>%
     longitude = as.numeric(longitude)
   )
 
+# change is_misinformation column
+gen_ai <- gen_ai %>%
+  mutate(is_misinformation = case_when(
+    is_misinformation == "0" ~ "Authentic",
+    is_misinformation == "1" ~ "Misinformation"
+  ))
+
 # ui
 ui <- dashboardPage(skin = "purple",
   dashboardHeader(
@@ -44,16 +51,16 @@ ui <- dashboardPage(skin = "purple",
     sidebarMenu(
       menuItem("Sample of Data", tabName = "data", icon = icon("database")),
       menuItem("Detected Gen AI Misinformation Around the World", tabName = "map", icon = icon("map-location-dot")),
-      menuItem("Misinformation Detection Frequency", tabName = "histogram", icon = icon("chart-column")),
+      menuItem("Misinformation Detection Frequency", tabName = "barchart", icon = icon("chart-column")),
       menuItem("Attributes of Misinformation Detection", tabName = "boxplot", icon = icon("chart-line")),
       menuItem("Final Presentation & Report", tabName = "report", icon = icon("file-lines"))
     )
   ),
   dashboardBody(
     tabItems(
-      # misinformation frequency histogram
+      # misinformation frequency bar chart
       tabItem(
-        tabName = "histogram",
+        tabName = "barchart",
         fluidRow(
           column(
             width = 7,
@@ -64,7 +71,6 @@ ui <- dashboardPage(skin = "purple",
               width = 12,
               plotOutput("misinfo_hist")
             ),
-            textOutput("keytxt")
           ),
           column(
             width = 5,
@@ -133,7 +139,6 @@ ui <- dashboardPage(skin = "purple",
             solidHeader = TRUE,
             width = 12,
             plotOutput("misinfo_location")),
-          textOutput("keytxt2")
           ),
           column(
             width = 5,
@@ -209,7 +214,7 @@ ui <- dashboardPage(skin = "purple",
 # server
 server <- function(input, output, session) {
 
-  # filtered data for histogram tab
+  # filtered data for bar chart tab
   filtered <- reactive({
     data <- gen_ai
     if (input$model != "All") {
@@ -218,7 +223,7 @@ server <- function(input, output, session) {
     data
   })
 
-  # misinformation frequency histogram
+  # misinformation frequency bar chart
   output$misinfo_hist <- renderPlot({
     ggplot(filtered(), aes(x = is_misinformation)) +
       geom_bar(fill = "grey50", width = 0.9) +
@@ -232,7 +237,7 @@ server <- function(input, output, session) {
   # value boxes with count and percentage
   output$misinfo_count <- renderValueBox({
     data <- filtered()
-    count_yes <- sum(data$is_misinformation == "1")
+    count_yes <- sum(data$is_misinformation == "Misinformation")
     total <- nrow(data)
     percent_yes <- ifelse(total > 0, round((count_yes / total) * 100, 1), 0)
 
@@ -246,7 +251,7 @@ server <- function(input, output, session) {
 
   output$not_misinfo_count <- renderValueBox({
     data <- filtered()
-    count_no <- sum(data$is_misinformation == "0")
+    count_no <- sum(data$is_misinformation == "Authentic")
     total <- nrow(data)
     percent_no <- ifelse(total > 0, round((count_no / total) * 100, 1), 0)
 
@@ -256,11 +261,6 @@ server <- function(input, output, session) {
       icon = icon("circle-check"),
       color = "olive"
     )
-  })
-  
-  # legend for histogram
-  output$keytxt <- renderText({
-    "0 = Authentic Information | 1 = Misinformation"
   })
 
   # city and country selection
@@ -309,8 +309,8 @@ server <- function(input, output, session) {
       filter(!is.na(latitude) & !is.na(longitude)) %>%
       group_by(city, latitude, longitude) %>%
       summarise(
-        misinfo = sum(is_misinformation == "1"),
-        authentic = sum(is_misinformation == "0"),
+        misinfo = sum(is_misinformation == "Misinformation"),
+        authentic = sum(is_misinformation == "Authentic"),
         .groups = "drop"
       )
   })
@@ -333,8 +333,8 @@ server <- function(input, output, session) {
       )
   })
 
-  # histogram by location
-  hist_data <- reactive({
+  # bar chart by location
+  bar_data <- reactive({
     data <- gen_ai
 
     if(!is.null(input$modelmap)) {
@@ -353,7 +353,7 @@ server <- function(input, output, session) {
   })
 
   output$misinfo_location <- renderPlot({
-    data <- hist_data()
+    data <- bar_data()
 
     title_text <- "Misinformation Frequency"
 
@@ -375,16 +375,11 @@ server <- function(input, output, session) {
       )
   })
 
-  # legend for location histogram
-  output$keytxt2 <- renderText({
-    "0 = Authentic Information | 1 = Misinformation"
-  })
-
   # location value boxes
   output$location_misinfo_count <- renderValueBox({
-    data <- hist_data()
+    data <- bar_data()
 
-    location_count_yes <- sum(data$is_misinformation == "1")
+    location_count_yes <- sum(data$is_misinformation == "Misinformation")
     location_total <- nrow(data)
     location_percent_yes <- ifelse(location_total > 0, round((location_count_yes / location_total) * 100, 1), 0)
 
@@ -397,9 +392,9 @@ server <- function(input, output, session) {
   })
 
   output$location_notmisinfo_count <- renderValueBox({
-    data <- hist_data()
+    data <- bar_data()
     
-    location_count_no <- sum(data$is_misinformation == "0")
+    location_count_no <- sum(data$is_misinformation == "Authentic")
     location_total <- nrow(data)
     location_percent_no <- ifelse(location_total > 0, round((location_count_no / location_total) * 100, 1), 0)
 
@@ -434,9 +429,9 @@ server <- function(input, output, session) {
     req(input$attribute)
 
     ai_authentic_info_stats <- gen_ai %>%
-      filter(model_signature == "GPT-like" & is_misinformation == "0") %>%
+      filter(model_signature == "GPT-like" & is_misinformation == "Authentic") %>%
       summarize(
-        Group = "Authentic Information (0)",
+        Group = "Authentic Information",
         Q1 = quantile(.data[[input$attribute]], 0.25),
         Median = median(.data[[input$attribute]]),
         Mean = mean(.data[[input$attribute]]),
@@ -446,9 +441,9 @@ server <- function(input, output, session) {
       )
     
     ai_misinfo_stats <- gen_ai %>%
-      filter(model_signature == "GPT-like" & is_misinformation == "1") %>%
+      filter(model_signature == "GPT-like" & is_misinformation == "Misinformation") %>%
       summarize(
-        Group = "Misinformation (1)",
+        Group = "Misinformation",
         Q1 = quantile(.data[[input$attribute]], 0.25),
         Median = median(.data[[input$attribute]]),
         Mean = mean(.data[[input$attribute]]),
@@ -464,7 +459,7 @@ server <- function(input, output, session) {
     req(input$attribute)
 
     human_authentic_info_stats <- gen_ai %>%
-      filter(model_signature == "human" & is_misinformation == "0") %>%
+      filter(model_signature == "human" & is_misinformation == "Authentic") %>%
       summarize(
         Group = "Authentic Information (0)",
         Q1 = quantile(.data[[input$attribute]], 0.25),
@@ -476,7 +471,7 @@ server <- function(input, output, session) {
       )
     
     human_misinfo_stats <- gen_ai %>%
-      filter(model_signature == "human" & is_misinformation == "1") %>%
+      filter(model_signature == "human" & is_misinformation == "Misinformation") %>%
       summarize(
         Group = "Misinformation (1)",
         Q1 = quantile(.data[[input$attribute]], 0.25),
