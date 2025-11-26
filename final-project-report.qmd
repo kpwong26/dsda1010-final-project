@@ -1,0 +1,10 @@
+---
+title: "Final Project Report"
+subtitle: "STAT/DSDA 1010; Data Science and Society Using R"
+author: "Karissa Wong"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
