@@ -130,3 +130,8 @@ t.test(ai_token, human_token)
 ```
 
 The conclusions of this test was a **p-value of around 0.461**, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+
+# Conclusion
+Based on the analysis of this dataset, there is **no significant difference** between AI and human writing. Additionally, it can be concluded that the amount of **misinformation** produced by AI and humans are **relatively the same**. There is not enough evidence to show that the **average difference** between the attributes of AI and human posts is significantly different, and there is **no definite factor** that causes text to be marked as GPT-like writing. As there were **no patterns found** in posts being marked as GPT-like, a conclusion cannot be confidently made on whether there is a need to change current media writing structure in the age of AI.
+
+The conclusion of this research project emphasizes how **narrow the gap between AI and human writing has become** and how crucial it is to understand **how to identify AI content**, as well as **how to identify misinformation**. AI content generally has a formulaic structure, repeated phrases, and a more consistent tone compared to human content. It is also crucial to assess the credibility of sources, as misinformation can appear in any type of content. AI is prone to citing outdated or incorrect sources when providing information, but it is still important to verify information regardless if AI or humans provide it.
