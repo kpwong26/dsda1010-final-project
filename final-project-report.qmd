@@ -48,9 +48,85 @@ In the **“Misinformation Detection Frequency”** tab, the frequency bar chart
 
 ### Testing for Statistical Significance
 A **two-proportion Z-test** was conducted to see if there is a significant difference between p~1~ and p~2~. The **null hypothesis** was there is no difference between the amount of misinformation posts in each model signature and the **alternative hypothesis** was the proportion of misinformation in GPT-like posts is greater than in human posts.
+
 ```{r}
 # two-proportion z-test
 prop.test(x = c(75, 80), n = c(157, 174), alternative = "greater")
 ```
 
 The conclusions of this test was a **p-value of around 0.4144**, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+
+## Attributes of Misinformation Detection
+In the **“Attributes of Misinformation Detection”** tab, each boxplot shows the **summary distribution of each attribute** in posts with GPT-like and human model signatures. The summary statistics show the quartiles, median, mean, minimum, maximum, and spread of each attribute. This helps summarize the distribution of **token counts, toxicity score, sentiment score,** and **readability score** in GPT-like and human posts. A **two-sample T-test** was conducted for each attribute to see if there is a significant difference between the means of the GPT-like and human post group.
+
+### Readability Score Findings
+For the readability score, the **null hypothesis** was there is no difference between the means of the GPT-like and human group and the **alternative hypothesis** was there is a difference between the means. The mean and standard deviation for the **GPT-like** group was 54.96 and 14.95, respectively. The mean and standard deviation for the **human** group was 55.29 and 14.74, respectively.
+
+```{r}
+# two-sample t-test for readability score
+ai_readability <- gen_ai %>%
+  filter(model_signature == "GPT-like") %>%
+  pull(readability_score)
+  
+human_readability <- gen_ai %>%
+  filter(model_signature == "human") %>%
+  pull(readability_score)
+  
+t.test(ai_readability, human_readability)
+```
+
+The conclusions of this test was a **p-value of around 0.8428**, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+
+### Sentiment Score Findings
+For the sentiment score, the **null hypothesis** was there is no difference between the means of the GPT-like and human group and the **alternative hypothesis** was there is a difference between the means. The mean and standard deviation for the **GPT-like** group was -0.02 and 0.57, respectively. The mean and standard deviation for the **human** group was 0.02 and 0.59, respectively.
+
+```{r}
+# two-sample t-test for sentiment score
+ai_sentiment <- gen_ai %>%
+  filter(model_signature == "GPT-like") %>%
+  pull(sentiment_score)
+  
+human_sentiment <- gen_ai %>%
+  filter(model_signature == "human") %>%
+  pull(sentiment_score)
+  
+t.test(ai_sentiment, human_sentiment)
+```
+
+The conclusions of this test was a **p-value of around 0.4827**, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+
+### Toxicity Score Findings
+For the toxicity score, the **null hypothesis** was there is no difference between the means of the GPT-like and human group and the **alternative hypothesis** was there is a difference between the means. The mean and standard deviation for the **GPT-like** group was 0.51 and 0.31, respectively. The mean and standard deviation for the **human** group was 0.50 and 0.28, respectively.
+
+```{r}
+# two-sample t-test for toxicity score
+ai_toxic <- gen_ai %>%
+  filter(model_signature == "GPT-like") %>%
+  pull(toxicity_score)
+  
+human_toxic <- gen_ai %>%
+  filter(model_signature == "human") %>%
+  pull(toxicity_score)
+  
+t.test(ai_toxic, human_toxic)
+```
+
+The conclusions of this test was a **p-value of around 0.6204**, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+
+### Token Count Findings
+For the token count, the **null hypothesis** was there is no difference between the means of the GPT-like human group and the **alternative hypothesis** was there is a difference in means. The mean and standard deviation for the **GPT-like** group was 34.22 and 20.43, respectively. The mean and standard deviation for the **human** group was 35.84 and 19.60, respectively.
+
+```{r}
+# two-sample t-test for token count
+ai_token <- gen_ai %>%
+  filter(model_signature == "GPT-like") %>%
+  pull(token_count)
+  
+human_token <- gen_ai %>%
+  filter(model_signature == "human") %>%
+  pull(token_count)
+  
+t.test(ai_token, human_token)
+```
+
+The conclusions of this test was a **p-value of around 0.461**, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.
