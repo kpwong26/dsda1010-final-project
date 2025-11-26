@@ -40,5 +40,17 @@ Given this sample of data, there was **not a significant difference in the numbe
 ## Engagement with Content
 In the **“Engagement with Content”** tab, the column chart shows the **relationship between engagement and posts with misinformation versus posts with authentic information.** The chart also has filters for model signature, country, and city to compare engagement with specific model signatures and engagement across countries. 
 
-## Findings
+### Findings
 The column chart shows that people overall **engage with more human content** (919,439 cases of engagement) than AI content (849,052 cases of engagement), showing a continuing dominance of human content in social media.
+
+## Misinformation Detection Frequency
+In the **“Misinformation Detection Frequency”** tab, the frequency bar chart **compares the count of misinformation content and authentic content by model signature.** In a sample of 157 GPT-like posts and 174 human posts, the amount of **misinformation posts were slightly higher in human posts** (p~1~ = 54%) compared to GPT-like posts (p~2~ = 52.2%).
+
+### Testing for Statistical Significance
+A **two-proportion Z-test** was conducted to see if there is a significant difference between p~1~ and p~2~. The **null hypothesis** was there is no difference between the amount of misinformation posts in each model signature and the **alternative hypothesis** was the proportion of misinformation in GPT-like posts is greater than in human posts.
+```{r}
+# two-proportion z-test
+prop.test(x = c(75, 80), n = c(157, 174), alternative = "greater")
+```
+
+The conclusions of this test was a **p-value of around 0.4144**, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.
