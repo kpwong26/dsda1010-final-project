@@ -463,11 +463,12 @@ server <- function(input, output, session) {
   output$ai_writing <- renderPlot({
     gen_ai %>%
       filter(model_signature == "GPT-like") %>%
-      ggplot(aes(x = factor(is_misinformation), y = !!sym(input$attribute))) +
+      ggplot(aes(x = model_signature, y = !!sym(input$attribute))) +
       geom_boxplot() +
       stat_summary() +
       labs(
-        x = "Authentic vs. Misinformation Cases"
+        x = "Model Signature",
+        y = "Attribute"
       )
   })
 
@@ -475,11 +476,12 @@ server <- function(input, output, session) {
   output$human_writing <- renderPlot({
     gen_ai %>%
       filter(model_signature == "human") %>%
-      ggplot(aes(x = factor(is_misinformation), y = !!sym(input$attribute))) +
+      ggplot(aes(x = model_signature, y = !!sym(input$attribute))) +
       geom_boxplot() +
       stat_summary() +
       labs(
-        x = "Authentic vs. Misinformation Cases"
+        x = "Model Signature",
+        y = "Attribute"
       )
   })
 
@@ -488,60 +490,32 @@ server <- function(input, output, session) {
     req(input$attribute)
 
     ai_authentic_info_stats <- gen_ai %>%
-      filter(model_signature == "GPT-like" & is_misinformation == "Authentic") %>%
+      filter(model_signature == "GPT-like") %>%
       summarize(
-        Group = "Authentic Information",
         Q1 = quantile(.data[[input$attribute]], 0.25),
         Median = median(.data[[input$attribute]]),
         Mean = mean(.data[[input$attribute]]),
+        Spread = sd(.data[[input$attribute]]),
         Q3 = quantile(.data[[input$attribute]], 0.75),
         Min = min(.data[[input$attribute]]),
         Max = max(.data[[input$attribute]])
       )
-    
-    ai_misinfo_stats <- gen_ai %>%
-      filter(model_signature == "GPT-like" & is_misinformation == "Misinformation") %>%
-      summarize(
-        Group = "Misinformation",
-        Q1 = quantile(.data[[input$attribute]], 0.25),
-        Median = median(.data[[input$attribute]]),
-        Mean = mean(.data[[input$attribute]]),
-        Q3 = quantile(.data[[input$attribute]], 0.75),
-        Min = min(.data[[input$attribute]]),
-        Max = max(.data[[input$attribute]])
-      )
-    
-    bind_rows(ai_authentic_info_stats, ai_misinfo_stats)
   })
 
   output$human_writing_stats <- renderTable({
     req(input$attribute)
 
     human_authentic_info_stats <- gen_ai %>%
-      filter(model_signature == "human" & is_misinformation == "Authentic") %>%
+      filter(model_signature == "human") %>%
       summarize(
-        Group = "Authentic Information",
         Q1 = quantile(.data[[input$attribute]], 0.25),
         Median = median(.data[[input$attribute]]),
         Mean = mean(.data[[input$attribute]]),
+        Spread = sd(.data[[input$attribute]]),
         Q3 = quantile(.data[[input$attribute]], 0.75),
         Min = min(.data[[input$attribute]]),
         Max = max(.data[[input$attribute]])
       )
-    
-    human_misinfo_stats <- gen_ai %>%
-      filter(model_signature == "human" & is_misinformation == "Misinformation") %>%
-      summarize(
-        Group = "Misinformation",
-        Q1 = quantile(.data[[input$attribute]], 0.25),
-        Median = median(.data[[input$attribute]]),
-        Mean = mean(.data[[input$attribute]]),
-        Q3 = quantile(.data[[input$attribute]], 0.75),
-        Min = min(.data[[input$attribute]]),
-        Max = max(.data[[input$attribute]])
-      )
-    
-    bind_rows(human_authentic_info_stats, human_misinfo_stats)
   })
 
   # data sample
