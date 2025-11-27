@@ -1,0 +1,18 @@
+---
+title: "Generative AI Misinformation Research"
+subtitle: "STAT/DSDA 1010; Data Science and Society Using R"
+author: Karissa Wong
+format:
+    revealjs:
+        slide-number: true
+        preview-links: true
+        incremental: true
+        theme: serif
+---
+
+# Introduction
+
+## Overview of Data
+
+- turn off alarm
+- get out of bed
