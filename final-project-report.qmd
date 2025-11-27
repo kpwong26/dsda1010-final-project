@@ -1,5 +1,5 @@
 ---
-title: "Final Project Report"
+title: "Generative AI Misinformation Research Final Report"
 subtitle: "STAT/DSDA 1010; Data Science and Society Using R"
 author: "Karissa Wong"
 format:
