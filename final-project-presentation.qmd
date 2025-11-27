@@ -15,7 +15,7 @@ format:
 ## Gen AI Misinformation Data
 This project uses the [Gen AI Misinformation Detection Data (2024-2025)](https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025) on Kaggle, which includes:
 
-- Realistic simulations of news articles/social media posts labeled as potential AI-generated misinformation
+- Realistic simulations of news articles/social media posts labeled as **potential AI-generated misinformation**
 - Time, location, author, attributes, credibility, and misinformation of each post
 
 ## Target Variables
@@ -29,21 +29,47 @@ For the purpose of this project, we will focus on the following variables:
 - Misinformation
 
 ## Purpose
-- Study the impact of Gen AI on misinformation in newswriting and social media
-- Determine factors that cause text to be marked as AI writing
-- Determine if AI produces more misinformation than humans
-- How much engagement each post receives based on model signature
+- Study the **impact of Gen AI on misinformation** in newswriting and social media
+- Determine **factors** that cause text to be marked as **AI writing**
+- Determine if **AI produces more misinformation than humans**
+- How much **engagement** each post receives based on model signature
 
 # Analysis
 
 ## Detected Misinformation Around the World
 Some findings were:
 
-- Not a significant difference in the number of GPT-like posts produced by each country
-- Every post is produced in metropolitan areas, corresponding with current trend of larger cities adopting AI
+- **Not a significant difference** in the number of GPT-like posts produced by each country
+- Every post is produced in **metropolitan areas**, corresponding with current trend of larger cities adopting AI
 
 ## Engagement with Content
 Some findings were:
 
-- Overall, people engage with more human content (919,439 cases of engagement) than AI content (849,052 cases of engagement)
+- Overall, people engage with **more human content** (919,439 cases of engagement) than AI content (849,052 cases of engagement)
 - Shows continuing dominance of human content in social media
+
+## Misinformation Detection Frequency {.smaller}
+A **two-proportion Z-test** was conducted to see if there is a significant difference between the **proportion of misinformation** content in GPT-like and human posts.
+
+- 157 GPT-like posts, 174 human posts
+- p~1~ = 54% (human), p~2~ = 52.2% (GPT-like)
+- **Null Hypothesis:** No difference between the amount of misinformation in each model signature
+- **Alternative Hypothesis:** Proportion of misinformation in GPT-like posts is greater than human posts
+
+## Results
+
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+gen_ai <- read.csv("generative_ai_misinformation_dataset.csv")
+```
+
+```{r}
+#| echo: true
+#| fig-width: 10
+#| fig-height: 4.5
+prop.test(x = c(75, 80), n = c(157, 174), alternative = "greater")
+```
+
+**Not enough evidence** to conclude there is a statistically significant difference given a significance level (α) of 0.05.
