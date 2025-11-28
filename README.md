@@ -1,0 +1,1 @@
+The goal of this research project is to study the impact of the increase in Gen AI on misinformation in newswriting and social media posts and to test common attributes of AI writing. The primary focus of this project is to answer the questions of what factors cause text to be marked as GPT-like writing and the probability that text marked as GPT-like is actually misinformation. 
