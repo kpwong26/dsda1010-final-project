@@ -1,5 +1,5 @@
 ---
-title: "Generative AI Misinformation Research Final Report"
+title: "Generative AI Misinformation Research Final"
 subtitle: "STAT/DSDA 1010; Data Science and Society Using R"
 author: "Karissa Wong"
 format:
@@ -15,38 +15,38 @@ gen_ai <- read.csv("generative_ai_misinformation_dataset.csv")
 
 # Introduction
 ## Overview of Data
-This research project primarily refers to its corresponding Shiny Dashboard and uses the [Gen AI Misinformation Detection Data (2024-2025)](https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025) dataset provided by Atharva Soundankar on Kaggle. The dataset contains realistic simulations of news articles and social media posts (referred to as a “post” in this project) that have spread through 2024-2025 and have all been labeled as potential AI-generated misinformation. Each input of data represents a post and its corresponding attributes, which can be categorized into time, location, author, attributes, credibility, and misinformation.
+This research project primarily refers to its corresponding Shiny Dashboard and uses the [Gen AI Misinformation Detection Data (2024-2025)](https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025) dataset provided by Atharva Soundankar on Kaggle. The dataset contains realistic simulations of news articles and social media posts (referred to as a “post” in this project) that circulated 2024-2025 and were labeled as potential AI-generated misinformation. Each entry represents a post and its corresponding attributes, which can be categorized into time, location, author, attributes, credibility, and misinformation.
 
 ### Target Variables
 For the purpose of this project, the variables that will be focused on are **country, city, token count, readability score, sentiment score, toxicity score, model signature, engagement,** and **if the post is misinformation or not.** A brief explanation of each variables can be found below:
 
-* **Country:** The country that the post was made in.
-* **City:** The city, corresponding with its respective country, that the post was made in.
-* **Token count:** In AI, a token is a unit of data that comes from breaking down larger words in a text. AI models use tokens to process responses and have limits to how many tokens can be processed at a time. Thus, longer outputs take more time due to the increased number of tokens.
-* **Readability score:** A numerical value identifying how easy it is to understand a piece of text, scoring from 0 to 100. A score closer to 100 indicates that the text is very easy to understand.
-* **Sentiment score:** A numerical value identifying the overall emotion expressed in a piece of text, scoring from -1 to 1. A score closer to -1 indicates an overall negative tone, closer to 0 indicates a neutral tone, and closer to 1 indicates an overall positive tone.
-* **Toxicity score:** A numerical values identifying how harmful or offensive the content of the text is. A score less than 0.5 indicates toxicity and a score greater than 0.5 indicates nontoxicity.
+* **Country:** The country where the post originated.
+* **City:** The city, corresponding with its respective country, where the post originated.
+* **Token count:** In AI, a token is a unit of data that comes from breaking down larger words or phrases. AI models use tokens to process responses and have limits to how many tokens can be processed at a time. Thus, more tokens result in outputs that take more time.
+* **Readability score:** A numerical value measuring how easy it is to understand a piece of text, scoring from 0 to 100. A score closer to 100 indicates that the text is very easy to understand.
+* **Sentiment score:** A numerical value representing the overall emotion expressed in a piece of text, scoring from -1 to 1. A score closer to -1 indicates an overall negative tone, closer to 0 indicates a neutral tone, and closer to 1 indicates an overall positive tone.
+* **Toxicity score:** A numerical value measuring how harmful or offensive the content of the text is. A score less than 0.5 indicates toxicity and a score greater than 0.5 indicates nontoxicity.
 * **Model Signature:** The type of writing style a post most closely reflects. The three model signatures identified were GPT-like (AI), human, and unknown.
-* **Engagement:** A numerical value identifying the sum of likes, shares, comments, and views a post has received.
+* **Engagement:** A numerical value representing the sum of likes, shares, comments, and views a post has received.
 * **Misinformation:** Indicates whether the content in the post is misinformation or authentic information.
 
 ## Purpose
-Some common attributes distinguish AI writing as its quantity has increased over the years. AI-generated text often have **higher readability scores** than human writing because algorithmic systems favor more **simplistic writing**, resulting in **lower token counts** to produce text faster. AI-generated text also **lacks emotional depth** has because of its structure as a computer, resulting in a **neutral sentiment and toxicity score** (0 and 0.5, respectively).
+Some common attributes distinguish AI writing as its presence has increased over the years. AI-generated text often has **higher readability scores** than human writing because algorithmic systems favor more **simplistic writing**, resulting in **lower token counts** to produce text faster. AI-generated text also **lacks emotional depth** has due to its computational structure, resulting in more **neutral sentiment and toxicity scores** (0 and 0.5, respectively).
 
-The goal of this research project is to **study the impact of the increase in Gen AI on misinformation in newswriting and social media posts and to test common attributes of AI writing.** The **primary focus** of this project is to answer the questions of what factors cause text to be marked as GPT-like writing and what is the probability that information marked as GPT-like writing is actually misinformation. Additionally, this project focuses on what countries produce the most AI-generated information and how much engagement each post receives based on their model signature. This analysis can help explore potential patterns in content being marked as AI misinformation, and if there is a need for changing current media writing structure to avoid this problem.
+The goal of this research project is to **study the impact of the increase in Gen AI on misinformation in newswriting and social media posts and to test common attributes of AI writing.** The **primary focus** of this project is to answer the questions of what factors cause text to be marked as GPT-like writing and the probability that text marked as GPT-like is actually misinformation. Additionally, this project focuses on which countries produce the most AI-generated information and how much engagement each post receives based on their model signature. This analysis can help explore potential patterns in content being marked as AI misinformation, and if there is a need for change in current media writing structure to avoid this problem.
 
 # Analysis
 ## Detected Misinformation Around the World
-In the **"Detected Misinformation Around the World"** tab, the map shows the **unique locations** each post originates from with a filter for model signature, country, and city. The map corresponds with a frequency bar chart, showing the number of misinformation and authentic information posts by model signature, country, city, or all three factors. 
+In the **"Detected Misinformation Around the World"** tab, the map shows the **unique locations** each post originated from with a filter for model signature, country, and city. The map corresponds to a frequency bar chart, showing the number of misinformation and authentic information posts by model signature, country, city, or all three factors. 
 
 ### Findings
-Given this sample of data, there was **not a significant difference in the number of AI posts produced by each country.** However, it is worth noting that every post is made from metropolitan areas, corresponding with the trend of larger cities adopting AI because of its ability to provide more funding and research.
+Based on this sample of data, there is **not a significant difference in the number of AI posts produced by each country.** However, it is worth noting that every post originated from metropolitan areas, corresponding with the trend of larger cities adopting AI because of its ability to provide more funding and research.
 
 ## Engagement with Content
 In the **“Engagement with Content”** tab, the column chart shows the **relationship between engagement and posts with misinformation versus posts with authentic information.** The chart also has filters for model signature, country, and city to compare engagement with specific model signatures and engagement across countries. 
 
 ### Findings
-The column chart shows that people overall **engage with more human content** (919,439 cases of engagement) than AI content (849,052 cases of engagement), showing a continuing dominance of human content in social media.
+The column chart shows that people overall **engage with more human content** (919,439 cases of engagement) than AI content (849,052 cases of engagement), showing the continued dominance of human content in social media.
 
 ## Misinformation Detection Frequency
 In the **“Misinformation Detection Frequency”** tab, the frequency bar chart **compares the count of misinformation content and authentic content by model signature.** In a sample of 157 GPT-like posts and 174 human posts, the amount of **misinformation posts were slightly higher in human posts** (p~1~ = 54%) compared to GPT-like posts (p~2~ = 52.2%).
@@ -59,7 +59,7 @@ A **two-proportion Z-test** was conducted to see if there is a significant diffe
 prop.test(x = c(75, 80), n = c(157, 174), alternative = "greater")
 ```
 
-The conclusions of this test was a **p-value of around 0.4144**, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+The test produced a **p-value of around 0.4144**, meaning that there is not enough evidence to conclude a statistically significant difference given a significance level (α) of 0.05.
 
 ## Attributes of Misinformation Detection
 In the **“Attributes of Misinformation Detection”** tab, each boxplot shows the **summary distribution of each attribute** in posts with GPT-like and human model signatures. The summary statistics show the quartiles, median, mean, minimum, maximum, and spread of each attribute. This helps summarize the distribution of **token counts, toxicity score, sentiment score,** and **readability score** in GPT-like and human posts. A **two-sample T-test** was conducted for each attribute to see if there is a significant difference between the means of the GPT-like and human post group.
@@ -80,7 +80,7 @@ human_readability <- gen_ai %>%
 t.test(ai_readability, human_readability)
 ```
 
-The conclusions of this test was a **p-value of around 0.8428**, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+The test produced a **p-value of around 0.8428**, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.
 
 ### Sentiment Score Findings
 For the sentiment score, the **null hypothesis** was there is no difference between the means of the GPT-like and human group and the **alternative hypothesis** was there is a difference between the means. The mean and standard deviation for the **GPT-like** group was -0.02 and 0.57, respectively. The mean and standard deviation for the **human** group was 0.02 and 0.59, respectively.
@@ -119,7 +119,7 @@ t.test(ai_toxic, human_toxic)
 The conclusions of this test was a **p-value of around 0.6204**, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.
 
 ### Token Count Findings
-For the token count, the **null hypothesis** was there is no difference between the means of the GPT-like human group and the **alternative hypothesis** was there is a difference in means. The mean and standard deviation for the **GPT-like** group was 34.22 and 20.43, respectively. The mean and standard deviation for the **human** group was 35.84 and 19.60, respectively.
+For the token count, the **null hypothesis** was there is no difference between the means of the GPT-like and human group and the **alternative hypothesis** was there is a difference in means. The mean and standard deviation for the **GPT-like** group was 34.22 and 20.43, respectively. The mean and standard deviation for the **human** group was 35.84 and 19.60, respectively.
 
 ```{r}
 # two-sample t-test for token count
@@ -137,6 +137,6 @@ t.test(ai_token, human_token)
 The conclusions of this test was a **p-value of around 0.461**, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.
 
 # Conclusion
-Based on the analysis of this dataset, there is **no significant difference** between AI and human writing and the amount of misinformation each model produces. There is not enough evidence to show that the **average difference** between the attributes of AI and human posts is significantly different, and there is **no definite factor** that causes text to be marked as GPT-like writing. Given these results, a conclusion cannot be confidently made on whether there is a need to change current media writing structure in the age of AI.
+Based on the analysis of this dataset, there is **no significant difference** between AI and human writing and the amount of misinformation each model produces. There is not enough evidence to show that the **average difference** between the attributes of AI and human posts is significantly different, and there is **no definitive factor** that causes text to be labeled as GPT-like. Given these results, a conclusion cannot be confidently made on whether there is a need to change current media writing structure in the age of AI.
 
-The conclusion of this research project emphasizes how **narrow the gap between AI and human writing has become** and how crucial it is to understand **how to identify AI content**, as well as **how to identify misinformation**. AI content generally has a formulaic structure, repeated phrases, and a more consistent tone compared to human content. It is also crucial to assess the credibility of sources, as misinformation can appear in any type of content. AI is prone to citing outdated or incorrect sources when providing information, but it is still important to verify information regardless if AI or humans provide it.
+The conclusion of this research project emphasizes how **narrow the gap between AI and human writing has become** and how crucial it is to understand **how to identify AI content**, as well as **how to identify misinformation**. AI content generally has a formulaic structure, repeated phrases, and a more consistent tone compared to human content. It is also crucial to assess the credibility of sources, as misinformation can appear in any type of content. AI is prone to citing outdated or incorrect sources when providing information, but it is still important to verify information regardless of whether it comes from AI or human authors.
