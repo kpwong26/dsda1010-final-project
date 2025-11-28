@@ -1,0 +1,80 @@
+---
+title: "Final Project Proposal"
+subtitle: "STAT/DSDA 1010; Data Science and Society Using R"
+author: "Karissa Wong"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Project Overview
+
+The goal of my project is to study the impact of the influx in
+Generative Artificial Intelligence (Gen AI) on misinformation
+in newswriting and social media posts. The primary focus of
+this project is to analyze factors that can flag a news article
+or social media post as potential AI-generated misinformation.
+This analysis can help explore potential patterns in content
+being marked as AI misinformation, and if there is a need for
+changing current mediawriting structure to avoid this problem.
+
+# Research Questions
+
+1. What factors are most related to causing text to be marked
+as AI-generated misinformation?
+
+2. What is the probability that information marked as AI-generated
+misinformation is actually misinformation?
+
+# Data Source
+
+**Gen AI Misinformation Detection Data (2024-2025)**: 
+<https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025>
+
+```{r}
+library(tidyverse)
+
+misinformation_data <- read.csv("generative_ai_misinformation_dataset.csv")
+
+glimpse(misinformation_data)
+```
+
+**What it contains**: This dataset contains 500 rows and 31 columns.
+There are 31 different variables, and each row represents information
+on a single post/article and if it is misinformation or not.
+
+**Why it is useful**: This dataset is useful for my project because
+each article/post is identified with a certain model signature, which
+indicates whether the article/post has been marked as AI-generated or
+written by a person. The dataset also includes attributes of each
+article/post. With both of these values, I can compare the attributes
+of articles/posts marked as AI-generated to those marked as human to
+explore if there are any patterns for writings being marked as AI-generated
+and the frequency of misinformation.
+
+# Planned Methods
+
+I will analyze and visualize the data by creating summary statistics
+and data visualizations to explore any correlations between certain
+attributes of articles/posts marked as AI-generated versus articles/posts
+marked as human. I will use various graphs using R to visually represent
+these trends, and use histograms to show the frequency of misinformation.
+I will build an interactive dashboard using R Shiny to show these different
+visualizations.
+
+---
+
+# Expected Outcomes
+
+I expect to show from this project how there are specific trends that follow
+articles marked as potential AI-generated misinformation, such as lower readability
+scores. This could be because AI writing is seen as less readable than human writing
+because it lacks the personal voice seen in human writing and is more monotonous
+overall. These types of possibilities, if true, can help support the conclusion
+that there may be a need for more mindfulness in mediawriting in a dominating
+era of Gen AI.
+
+# References
+
+Kaggle Datasets: <https://www.kaggle.com/datasets>
