@@ -29,32 +29,32 @@ For the purpose of this project, we will focus on the following variables:
 - Misinformation
 
 ## Purpose
-- Study the **impact of Gen AI on misinformation** in newswriting and social media
-- Determine **factors** that cause text to be marked as **AI writing**
-- Determine if **AI produces more misinformation than humans**
-- How much **engagement** each post receives based on model signature
+- Examine the **impact of Gen AI on misinformation** in news and social media
+- Identify **factors** that cause text to be marked as **AI writing**
+- Determine whether **AI or human posts contain more misinformation**
+- Compare **engagement levels** across model signatures
 
 # Analysis
 
 ## Detected Misinformation Around the World
-Some findings were:
+**Key Findings:**
 
-- **Not a significant difference** in the number of GPT-like posts produced by each country
-- Every post is produced in **metropolitan areas**, corresponding with current trend of larger cities adopting AI
+- **No significant difference** in the number of GPT-like posts produced by each country
+- Every post originated in **metropolitan areas**, aligning with current trend of larger cities adopting AI
 
 ## Engagement with Content
-Some findings were:
+**Key Findings:**
 
-- Overall, people engage with **more human content** (919,439 cases of engagement) than AI content (849,052 cases of engagement)
-- Shows continuing dominance of human content in social media
+- Overall, people engage with **more human content** (919,439 cases) than GPT-like content (849,052 cases)
+- Shows continued dominance of human-produced content in social media
 
 ## Misinformation Detection Frequency {.smaller}
 A **two-proportion Z-test** was conducted to see if there is a significant difference between the **proportion of misinformation** content in GPT-like and human posts.
 
-- 157 GPT-like posts, 174 human posts
+- 157 GPT-like posts; 174 human posts
 - p~1~ = 54% (human), p~2~ = 52.2% (GPT-like)
-- **Null Hypothesis:** No difference between the amount of misinformation in each model signature
-- **Alternative Hypothesis:** Proportion of misinformation in GPT-like posts is greater than human posts
+- **Null Hypothesis (H~0~):** No difference between the amount of misinformation in each model signature
+- **Alternative Hypothesis (H~a~):** Proportion of misinformation in GPT-like posts is greater than human posts
 
 ## Results
 
@@ -72,7 +72,7 @@ gen_ai <- read.csv("generative_ai_misinformation_dataset.csv")
 prop.test(x = c(75, 80), n = c(157, 174), alternative = "greater")
 ```
 
-**Not enough evidence** to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+**Not enough evidence** to conclude a significant difference given a significance level (α) of 0.05.
 
 ## Attributes of Misinformation Detection
 - Each boxplot shows the **summary distribution** of each attribute in posts with **GPT-like** and **human** model signatures
@@ -80,11 +80,11 @@ prop.test(x = c(75, 80), n = c(157, 174), alternative = "greater")
 - A **two sample T-test** was conducted for each attribute to see if there is a significant difference between the **means** of the GPT-like and human post group
 
 ## Readability Score
-- **GPT-like group:** Mean = 54.96, Standard deviation = 54.96
-- **Human group:** Mean = 55.29, Standard deviation = 14.74
+- **GPT-like:** Mean = 54.96, Standard deviation = 54.96
+- **Human:** Mean = 55.29, Standard deviation = 14.74
 - **Two-sample T-test:**
-    - **Null Hypothesis:** No difference between the means of the GPT-like and human group
-    - **Alternative Hypothesis:** Difference between the means
+    - **Null Hypothesis (H~0~):** No difference between the means of the GPT-like and human group
+    - **Alternative Hypothesis (H~a~):** Difference between the means
 
 ## Results {.smaller}
 
@@ -103,14 +103,14 @@ human_readability <- gen_ai %>%
 t.test(ai_readability, human_readability)
 ```
 
-**Not enough evidence** to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+**Not enough evidence** to conclude a significant difference given a significance level (α) of 0.05.
 
 ## Sentiment Score
-- **GPT-like group:** Mean = -0.02, Standard deviation = 0.57
-- **Human group:** Mean = 0.02, Standard deviation = 0.59
+- **GPT-like:** Mean = -0.02, Standard deviation = 0.57
+- **Human:** Mean = 0.02, Standard deviation = 0.59
 - **Two-sample T-test:**
-    - **Null Hypothesis:** No difference between the means of the GPT-like and human group
-    - **Alternative Hypothesis:** Difference between the means
+    - **Null Hypothesis (H~0~):** No difference between the means of the GPT-like and human group
+    - **Alternative Hypothesis (H~a~):** Difference between the means
 
 ## Results {.smaller}
 
@@ -129,14 +129,14 @@ human_sentiment <- gen_ai %>%
 t.test(ai_sentiment, human_sentiment)
 ```
 
-**Not enough evidence** to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+**Not enough evidence** to conclude a significant difference given a significance level (α) of 0.05.
 
 ## Toxicity Score
-- **GPT-like group:** Mean = 0.51, Standard deviation = 0.31
-- **Human group:** Mean = 0.50, Standard deviation = 0.28
+- **GPT-like:** Mean = 0.51, Standard deviation = 0.31
+- **Human:** Mean = 0.50, Standard deviation = 0.28
 - **Two-sample T-test:**
-    - **Null Hypothesis:** No difference between the means of the GPT-like and human group
-    - **Alternative Hypothesis:** Difference between the means
+    - **Null Hypothesis (H~0~):** No difference between the means of the GPT-like and human group
+    - **Alternative Hypothesis (H~a~):** Difference between the means
 
 ## Results {.smaller}
 
@@ -155,14 +155,14 @@ human_toxic <- gen_ai %>%
 t.test(ai_toxic, human_toxic)
 ```
 
-**Not enough evidence** to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+**Not enough evidence** to conclude a significant difference given a significance level (α) of 0.05.
 
 ## Token Count
-- **GPT-like group:** Mean = 34.22, Standard deviation = 20.43
-- **Human group:** Mean = 35.84, Standard deviation = 19.60
+- **GPT-like:** Mean = 34.22, Standard deviation = 20.43
+- **Human:** Mean = 35.84, Standard deviation = 19.60
 - **Two-sample T-test:**
-    - **Null Hypothesis:** No difference between the means of the GPT-like and human group
-    - **Alternative Hypothesis:** Difference between the means
+    - **Null Hypothesis (H~0~):** No difference between the means of the GPT-like and human group
+    - **Alternative Hypothesis (H~a~):** Difference between the means
 
 ## Results {.smaller}
 
@@ -181,16 +181,16 @@ human_token <- gen_ai %>%
 t.test(ai_token, human_token)
 ```
 
-**Not enough evidence** to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+**Not enough evidence** to conclude a significant difference given a significance level (α) of 0.05.
 
 # Conclusion
 ## Results of the Analysis
-- No **significant difference** between amount of misinformation each model produces
-- Not enough evidence to show that **average difference** between attributes of AI and human posts is significantly different
-- **No definite factor** that causes text to be marked as GPT-like writing
+- No **significant difference** in amount of misinformation each model produces
+- No statistically significant differences in **readability, sentiment, toxicity,** or **token count**
+    - No definite factor that causes text to be marked as **GPT-like**
 
 ## Takeaways
-- **Narrowed gap** between AI and human writing
-- Crucial to understand how to identify AI content and misinformation
-    - Recognize formulaic structure and repeated phrases
-    - Assess credibilty of sources
+- The gap between AI and human writing is **narrowing**
+- Crucial to understand how to **identify AI content and misinformation**
+    - Recognize **formulaic structure, repeated phrases,** and **consistent tone**
+    - Assess **credibility** of sources
