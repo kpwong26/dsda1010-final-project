@@ -16,7 +16,8 @@ gen_ai <- read.csv("generative_ai_misinformation_dataset.csv")
 
 # Introduction
 ## Overview of Data
-This research project primarily refers to its corresponding Shiny Dashboard and uses the
+This research project primarily refers to its corresponding
+[Shiny Dashboard](https://kpwong26.shinyapps.io/final-project-kpwong26/) and uses the
 [Gen AI Misinformation Detection Data (2024-2025)](https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025)
 dataset provided by Atharva Soundankar on Kaggle. The dataset contains realistic simulations
 of news articles and social media posts (referred to as a “post” in this project) that
