@@ -13,7 +13,8 @@ format:
 # Overview
 
 ## Gen AI Misinformation Data
-This project uses the [Gen AI Misinformation Detection Data (2024-2025)](https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025) on Kaggle, which includes:
+This project uses the [Gen AI Misinformation Detection Data (2024-2025)](https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025)
+on Kaggle, which includes:
 
 - Realistic simulations of news articles/social media posts labeled as **potential AI-generated misinformation**
 - Time, location, author, attributes, credibility, and misinformation of each post
@@ -49,7 +50,8 @@ For the purpose of this project, we will focus on the following variables:
 - Shows continued dominance of human-produced content in social media
 
 ## Misinformation Detection Frequency {.smaller}
-A **two-proportion Z-test** was conducted to see if there is a significant difference between the **proportion of misinformation** content in GPT-like and human posts.
+A **two-proportion Z-test** was conducted to see if there is a significant difference between the
+**proportion of misinformation** content in GPT-like and human posts.
 
 - 157 GPT-like posts; 174 human posts
 - p~1~ = 54% (human), p~2~ = 52.2% (GPT-like)
@@ -77,7 +79,8 @@ prop.test(x = c(75, 80), n = c(157, 174), alternative = "greater")
 ## Attributes of Misinformation Detection
 - Each boxplot shows the **summary distribution** of each attribute in posts with **GPT-like** and **human** model signatures
     - **Attributes:** Readability score, toxicity score, sentiment score, token count
-- A **two sample T-test** was conducted for each attribute to see if there is a significant difference between the **means** of the GPT-like and human post group
+- A **two sample T-test** was conducted for each attribute to see if there is a significant difference
+between the **means** of the GPT-like and human post group
 
 ## Readability Score
 - **GPT-like:** Mean = 54.96, Standard deviation = 54.96
