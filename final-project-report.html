@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Karissa Wong">
+
+<title>Generative AI Misinformation Research Final</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="final-project-report_files/libs/clipboard/clipboard.min.js"></script>
+<script src="final-project-report_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="final-project-report_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="final-project-report_files/libs/quarto-html/popper.min.js"></script>
+<script src="final-project-report_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="final-project-report_files/libs/quarto-html/anchor.min.js"></script>
+<link href="final-project-report_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="final-project-report_files/libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="final-project-report_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="final-project-report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="final-project-report_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
+  <ul class="collapse">
+  <li><a href="#overview-of-data" id="toc-overview-of-data" class="nav-link" data-scroll-target="#overview-of-data"><span class="header-section-number">1.1</span> Overview of Data</a>
+  <ul class="collapse">
+  <li><a href="#target-variables" id="toc-target-variables" class="nav-link" data-scroll-target="#target-variables"><span class="header-section-number">1.1.1</span> Target Variables</a></li>
+  </ul></li>
+  <li><a href="#purpose" id="toc-purpose" class="nav-link" data-scroll-target="#purpose"><span class="header-section-number">1.2</span> Purpose</a></li>
+  </ul></li>
+  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis"><span class="header-section-number">2</span> Analysis</a>
+  <ul class="collapse">
+  <li><a href="#detected-misinformation-around-the-world" id="toc-detected-misinformation-around-the-world" class="nav-link" data-scroll-target="#detected-misinformation-around-the-world"><span class="header-section-number">2.1</span> Detected Misinformation Around the World</a>
+  <ul class="collapse">
+  <li><a href="#findings" id="toc-findings" class="nav-link" data-scroll-target="#findings"><span class="header-section-number">2.1.1</span> Findings</a></li>
+  </ul></li>
+  <li><a href="#engagement-with-content" id="toc-engagement-with-content" class="nav-link" data-scroll-target="#engagement-with-content"><span class="header-section-number">2.2</span> Engagement with Content</a>
+  <ul class="collapse">
+  <li><a href="#findings-1" id="toc-findings-1" class="nav-link" data-scroll-target="#findings-1"><span class="header-section-number">2.2.1</span> Findings</a></li>
+  </ul></li>
+  <li><a href="#misinformation-detection-frequency" id="toc-misinformation-detection-frequency" class="nav-link" data-scroll-target="#misinformation-detection-frequency"><span class="header-section-number">2.3</span> Misinformation Detection Frequency</a>
+  <ul class="collapse">
+  <li><a href="#testing-for-statistical-significance" id="toc-testing-for-statistical-significance" class="nav-link" data-scroll-target="#testing-for-statistical-significance"><span class="header-section-number">2.3.1</span> Testing for Statistical Significance</a></li>
+  </ul></li>
+  <li><a href="#attributes-of-misinformation-detection" id="toc-attributes-of-misinformation-detection" class="nav-link" data-scroll-target="#attributes-of-misinformation-detection"><span class="header-section-number">2.4</span> Attributes of Misinformation Detection</a>
+  <ul class="collapse">
+  <li><a href="#readability-score-findings" id="toc-readability-score-findings" class="nav-link" data-scroll-target="#readability-score-findings"><span class="header-section-number">2.4.1</span> Readability Score Findings</a></li>
+  <li><a href="#sentiment-score-findings" id="toc-sentiment-score-findings" class="nav-link" data-scroll-target="#sentiment-score-findings"><span class="header-section-number">2.4.2</span> Sentiment Score Findings</a></li>
+  <li><a href="#toxicity-score-findings" id="toc-toxicity-score-findings" class="nav-link" data-scroll-target="#toxicity-score-findings"><span class="header-section-number">2.4.3</span> Toxicity Score Findings</a></li>
+  <li><a href="#token-count-findings" id="toc-token-count-findings" class="nav-link" data-scroll-target="#token-count-findings"><span class="header-section-number">2.4.4</span> Token Count Findings</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">3</span> Conclusion</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Generative AI Misinformation Research Final</h1>
+<p class="subtitle lead">STAT/DSDA 1010; Data Science and Society Using R</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Karissa Wong </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<section id="overview-of-data" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="overview-of-data"><span class="header-section-number">1.1</span> Overview of Data</h2>
+<p>This research project primarily refers to its corresponding Shiny Dashboard and uses the <a href="https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025">Gen AI Misinformation Detection Data (2024-2025)</a> dataset provided by Atharva Soundankar on Kaggle. The dataset contains realistic simulations of news articles and social media posts (referred to as a “post” in this project) that circulated 2024-2025 and were labeled as potential AI-generated misinformation. Each entry represents a post and its corresponding attributes, which can be categorized into time, location, author, attributes, credibility, and misinformation.</p>
+<section id="target-variables" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="target-variables"><span class="header-section-number">1.1.1</span> Target Variables</h3>
+<p>For the purpose of this project, the variables that will be focused on are <strong>country, city, token count, readability score, sentiment score, toxicity score, model signature, engagement,</strong> and <strong>if the post is misinformation or not.</strong> A brief explanation of each variables can be found below:</p>
+<ul>
+<li><strong>Country:</strong> The country where the post originated.</li>
+<li><strong>City:</strong> The city, corresponding with its respective country, where the post originated.</li>
+<li><strong>Token count:</strong> In AI, a token is a unit of data that comes from breaking down larger words or phrases. AI models use tokens to process responses and have limits to how many tokens can be processed at a time. Thus, more tokens result in outputs that take more time.</li>
+<li><strong>Readability score:</strong> A numerical value measuring how easy it is to understand a piece of text, scoring from 0 to 100. A score closer to 100 indicates that the text is very easy to understand.</li>
+<li><strong>Sentiment score:</strong> A numerical value representing the overall emotion expressed in a piece of text, scoring from -1 to 1. A score closer to -1 indicates an overall negative tone, closer to 0 indicates a neutral tone, and closer to 1 indicates an overall positive tone.</li>
+<li><strong>Toxicity score:</strong> A numerical value measuring how harmful or offensive the content of the text is. A score less than 0.5 indicates toxicity and a score greater than 0.5 indicates nontoxicity.</li>
+<li><strong>Model Signature:</strong> The type of writing style a post most closely reflects. The three model signatures identified were GPT-like (AI), human, and unknown.</li>
+<li><strong>Engagement:</strong> A numerical value representing the sum of likes, shares, comments, and views a post has received.</li>
+<li><strong>Misinformation:</strong> Indicates whether the content in the post is misinformation or authentic information.</li>
+</ul>
+</section>
+</section>
+<section id="purpose" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="purpose"><span class="header-section-number">1.2</span> Purpose</h2>
+<p>Some common attributes distinguish AI writing as its presence has increased over the years. AI-generated text often has <strong>higher readability scores</strong> than human writing because algorithmic systems favor more <strong>simplistic writing</strong>, resulting in <strong>lower token counts</strong> to produce text faster. AI-generated text also <strong>lacks emotional depth</strong> has due to its computational structure, resulting in more <strong>neutral sentiment and toxicity scores</strong> (0 and 0.5, respectively).</p>
+<p>The goal of this research project is to <strong>study the impact of the increase in Gen AI on misinformation in newswriting and social media posts and to test common attributes of AI writing.</strong> The <strong>primary focus</strong> of this project is to answer the questions of what factors cause text to be marked as GPT-like writing and the probability that text marked as GPT-like is actually misinformation. Additionally, this project focuses on which countries produce the most AI-generated information and how much engagement each post receives based on their model signature. This analysis can help explore potential patterns in content being marked as AI misinformation, and if there is a need for change in current media writing structure to avoid this problem.</p>
+</section>
+</section>
+<section id="analysis" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Analysis</h1>
+<section id="detected-misinformation-around-the-world" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="detected-misinformation-around-the-world"><span class="header-section-number">2.1</span> Detected Misinformation Around the World</h2>
+<p>In the <strong>“Detected Misinformation Around the World”</strong> tab, the map shows the <strong>unique locations</strong> each post originated from with a filter for model signature, country, and city. The map corresponds to a frequency bar chart, showing the number of misinformation and authentic information posts by model signature, country, city, or all three factors.</p>
+<section id="findings" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="findings"><span class="header-section-number">2.1.1</span> Findings</h3>
+<p>Based on this sample of data, there is <strong>not a significant difference in the number of AI posts produced by each country.</strong> However, it is worth noting that every post originated from metropolitan areas, corresponding with the trend of larger cities adopting AI because of its ability to provide more funding and research.</p>
+</section>
+</section>
+<section id="engagement-with-content" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="engagement-with-content"><span class="header-section-number">2.2</span> Engagement with Content</h2>
+<p>In the <strong>“Engagement with Content”</strong> tab, the column chart shows the <strong>relationship between engagement and posts with misinformation versus posts with authentic information.</strong> The chart also has filters for model signature, country, and city to compare engagement with specific model signatures and engagement across countries.</p>
+<section id="findings-1" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="findings-1"><span class="header-section-number">2.2.1</span> Findings</h3>
+<p>The column chart shows that people overall <strong>engage with more human content</strong> (919,439 cases of engagement) than AI content (849,052 cases of engagement), showing the continued dominance of human content in social media.</p>
+</section>
+</section>
+<section id="misinformation-detection-frequency" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="misinformation-detection-frequency"><span class="header-section-number">2.3</span> Misinformation Detection Frequency</h2>
+<p>In the <strong>“Misinformation Detection Frequency”</strong> tab, the frequency bar chart <strong>compares the count of misinformation content and authentic content by model signature.</strong> In a sample of 157 GPT-like posts and 174 human posts, the amount of <strong>misinformation posts were slightly higher in human posts</strong> (p<sub>1</sub> = 54%) compared to GPT-like posts (p<sub>2</sub> = 52.2%).</p>
+<section id="testing-for-statistical-significance" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="testing-for-statistical-significance"><span class="header-section-number">2.3.1</span> Testing for Statistical Significance</h3>
+<p>A <strong>two-proportion Z-test</strong> was conducted to see if there is a significant difference between p<sub>1</sub> and p<sub>2</sub>. The <strong>null hypothesis</strong> was there is no difference between the amount of misinformation posts in each model signature and the <strong>alternative hypothesis</strong> was the proportion of misinformation in GPT-like posts is greater than in human posts.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># two-proportion z-test</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">75</span>, <span class="dv">80</span>), <span class="at">n =</span> <span class="fu">c</span>(<span class="dv">157</span>, <span class="dv">174</span>), <span class="at">alternative =</span> <span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    2-sample test for equality of proportions with continuity correction
+
+data:  c(75, 80) out of c(157, 174)
+X-squared = 0.04677, df = 1, p-value = 0.4144
+alternative hypothesis: greater
+95 percent confidence interval:
+ -0.07846371  1.00000000
+sample estimates:
+   prop 1    prop 2 
+0.4777070 0.4597701 </code></pre>
+</div>
+</div>
+<p>The test produced a <strong>p-value of around 0.4144</strong>, meaning that there is not enough evidence to conclude a statistically significant difference given a significance level (α) of 0.05.</p>
+</section>
+</section>
+<section id="attributes-of-misinformation-detection" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="attributes-of-misinformation-detection"><span class="header-section-number">2.4</span> Attributes of Misinformation Detection</h2>
+<p>In the <strong>“Attributes of Misinformation Detection”</strong> tab, each boxplot shows the <strong>summary distribution of each attribute</strong> in posts with GPT-like and human model signatures. The summary statistics show the quartiles, median, mean, minimum, maximum, and spread of each attribute. This helps summarize the distribution of <strong>token counts, toxicity score, sentiment score,</strong> and <strong>readability score</strong> in GPT-like and human posts. A <strong>two-sample T-test</strong> was conducted for each attribute to see if there is a significant difference between the means of the GPT-like and human post group.</p>
+<section id="readability-score-findings" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="readability-score-findings"><span class="header-section-number">2.4.1</span> Readability Score Findings</h3>
+<p>For the readability score, the <strong>null hypothesis</strong> was there is no difference between the means of the GPT-like and human group and the <strong>alternative hypothesis</strong> was there is a difference between the means. The mean and standard deviation for the <strong>GPT-like</strong> group was 54.96 and 14.95, respectively. The mean and standard deviation for the <strong>human</strong> group was 55.29 and 14.74, respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># two-sample t-test for readability score</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ai_readability <span class="ot">&lt;-</span> gen_ai <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(model_signature <span class="sc">==</span> <span class="st">"GPT-like"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(readability_score)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>human_readability <span class="ot">&lt;-</span> gen_ai <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(model_signature <span class="sc">==</span> <span class="st">"human"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(readability_score)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(ai_readability, human_readability)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  ai_readability and human_readability
+t = -0.19844, df = 324.55, p-value = 0.8428
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -3.540118  2.891387
+sample estimates:
+mean of x mean of y 
+ 54.96414  55.28851 </code></pre>
+</div>
+</div>
+<p>The test produced a <strong>p-value of around 0.8428</strong>, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.</p>
+</section>
+<section id="sentiment-score-findings" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="sentiment-score-findings"><span class="header-section-number">2.4.2</span> Sentiment Score Findings</h3>
+<p>For the sentiment score, the <strong>null hypothesis</strong> was there is no difference between the means of the GPT-like and human group and the <strong>alternative hypothesis</strong> was there is a difference between the means. The mean and standard deviation for the <strong>GPT-like</strong> group was -0.02 and 0.57, respectively. The mean and standard deviation for the <strong>human</strong> group was 0.02 and 0.59, respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># two-sample t-test for sentiment score</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ai_sentiment <span class="ot">&lt;-</span> gen_ai <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(model_signature <span class="sc">==</span> <span class="st">"GPT-like"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(sentiment_score)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>human_sentiment <span class="ot">&lt;-</span> gen_ai <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(model_signature <span class="sc">==</span> <span class="st">"human"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(sentiment_score)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(ai_sentiment, human_sentiment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  ai_sentiment and human_sentiment
+t = -0.70275, df = 327.4, p-value = 0.4827
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.16977714  0.08040486
+sample estimates:
+  mean of x   mean of y 
+-0.02137580  0.02331034 </code></pre>
+</div>
+</div>
+<p>The conclusions of this test was a <strong>p-value of around 0.4827</strong>, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.</p>
+</section>
+<section id="toxicity-score-findings" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="toxicity-score-findings"><span class="header-section-number">2.4.3</span> Toxicity Score Findings</h3>
+<p>For the toxicity score, the <strong>null hypothesis</strong> was there is no difference between the means of the GPT-like and human group and the <strong>alternative hypothesis</strong> was there is a difference between the means. The mean and standard deviation for the <strong>GPT-like</strong> group was 0.51 and 0.31, respectively. The mean and standard deviation for the <strong>human</strong> group was 0.50 and 0.28, respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># two-sample t-test for toxicity score</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>ai_toxic <span class="ot">&lt;-</span> gen_ai <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(model_signature <span class="sc">==</span> <span class="st">"GPT-like"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(toxicity_score)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>human_toxic <span class="ot">&lt;-</span> gen_ai <span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(model_signature <span class="sc">==</span> <span class="st">"human"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(toxicity_score)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(ai_toxic, human_toxic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  ai_toxic and human_toxic
+t = 0.32419, df = 319.02, p-value = 0.746
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.05358029  0.07472137
+sample estimates:
+mean of x mean of y 
+0.5091338 0.4985632 </code></pre>
+</div>
+</div>
+<p>The conclusions of this test was a <strong>p-value of around 0.6204</strong>, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.</p>
+</section>
+<section id="token-count-findings" class="level3" data-number="2.4.4">
+<h3 data-number="2.4.4" class="anchored" data-anchor-id="token-count-findings"><span class="header-section-number">2.4.4</span> Token Count Findings</h3>
+<p>For the token count, the <strong>null hypothesis</strong> was there is no difference between the means of the GPT-like and human group and the <strong>alternative hypothesis</strong> was there is a difference in means. The mean and standard deviation for the <strong>GPT-like</strong> group was 34.22 and 20.43, respectively. The mean and standard deviation for the <strong>human</strong> group was 35.84 and 19.60, respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># two-sample t-test for token count</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>ai_token <span class="ot">&lt;-</span> gen_ai <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(model_signature <span class="sc">==</span> <span class="st">"GPT-like"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(token_count)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>human_token <span class="ot">&lt;-</span> gen_ai <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(model_signature <span class="sc">==</span> <span class="st">"human"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(token_count)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(ai_token, human_token)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  ai_token and human_token
+t = -0.73806, df = 322.3, p-value = 0.461
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -5.968512  2.711978
+sample estimates:
+mean of x mean of y 
+ 34.21656  35.84483 </code></pre>
+</div>
+</div>
+<p>The conclusions of this test was a <strong>p-value of around 0.461</strong>, meaning that there is not enough evidence to conclude there is a statistically significant difference given a significance level (α) of 0.05.</p>
+</section>
+</section>
+</section>
+<section id="conclusion" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Conclusion</h1>
+<p>Based on the analysis of this dataset, there is <strong>no significant difference</strong> between AI and human writing and the amount of misinformation each model produces. There is not enough evidence to show that the <strong>average difference</strong> between the attributes of AI and human posts is significantly different, and there is <strong>no definitive factor</strong> that causes text to be labeled as GPT-like. Given these results, a conclusion cannot be confidently made on whether there is a need to change current media writing structure in the age of AI.</p>
+<p>The conclusion of this research project emphasizes how <strong>narrow the gap between AI and human writing has become</strong> and how crucial it is to understand <strong>how to identify AI content</strong>, as well as <strong>how to identify misinformation</strong>. AI content generally has a formulaic structure, repeated phrases, and a more consistent tone compared to human content. It is also crucial to assess the credibility of sources, as misinformation can appear in any type of content. AI is prone to citing outdated or incorrect sources when providing information, but it is still important to verify information regardless of whether it comes from AI or human authors.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
