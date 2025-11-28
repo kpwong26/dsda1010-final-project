@@ -107,7 +107,9 @@ ui <- dashboardPage(skin = "purple",
               status = "warning",
               solidHeader = TRUE,
               width = 12,
-              checkboxGroupInput("modelmap", "Select Model Signatures", choices = unique(gen_ai$model_signature), selected = unique(gen_ai$model_signature))
+              checkboxGroupInput("modelmap", "Select Model Signatures",
+              choices = unique(gen_ai$model_signature),
+              selected = unique(gen_ai$model_signature))
             ),
           box(
             title = "Country",
@@ -172,7 +174,8 @@ ui <- dashboardPage(skin = "purple",
             status = "warning",
             solidHeader = TRUE,
             width = 12,
-            selectInput("attribute", "Select an attribute", choices = c("readability_score", "sentiment_score", "toxicity_score", "token_count"))
+            selectInput("attribute", "Select an attribute",
+            choices = c("readability_score", "sentiment_score", "toxicity_score", "token_count"))
           )),
           column(
             width = 6,
@@ -227,7 +230,8 @@ ui <- dashboardPage(skin = "purple",
               width = 12,
               status = "warning",
               solidHeader = TRUE,
-              selectInput("model_2", "Select a Model Signature", choices = c("All", unique(gen_ai$model_signature)))
+              selectInput("model_2", "Select a Model Signature",
+              choices = c("All", unique(gen_ai$model_signature)))
             ),
             box(
             title = "Country",
@@ -252,6 +256,18 @@ ui <- dashboardPage(skin = "purple",
             valueBoxOutput("misinfo_engagement_count", width = 12),
             valueBoxOutput("authentic_engagement_count", width = 12)
           )
+        )
+      ),
+
+      # final presentation and report
+      tabItem(
+        tabName = "report",
+        fluidRow(
+          box(
+            title = "Links to Report and Presentation",
+            status = "primary",
+            width = 12,
+          htmlOutput("linked_text"))
         )
       )
     )
@@ -434,7 +450,8 @@ server <- function(input, output, session) {
 
     location_count_yes <- sum(data$is_misinformation == "Misinformation")
     location_total <- nrow(data)
-    location_percent_yes <- ifelse(location_total > 0, round((location_count_yes / location_total) * 100, 1), 0)
+    location_percent_yes <- ifelse(location_total > 0,
+      round((location_count_yes / location_total) * 100, 1), 0)
 
     valueBox(
       value = paste0(location_count_yes, " (", location_percent_yes, "%)"),
@@ -449,7 +466,8 @@ server <- function(input, output, session) {
     
     location_count_no <- sum(data$is_misinformation == "Authentic")
     location_total <- nrow(data)
-    location_percent_no <- ifelse(location_total > 0, round((location_count_no / location_total) * 100, 1), 0)
+    location_percent_no <- ifelse(location_total > 0,
+      round((location_count_no / location_total) * 100, 1), 0)
 
     valueBox(
       value = paste0(location_count_no, " (", location_percent_no, "%)"),
@@ -531,7 +549,8 @@ server <- function(input, output, session) {
   })
 
   output$kaggle <- renderUI({
-    HTML('Data taken from <a href="https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025"target="_blank">Gen AI Misinformation Detection Data (2024–2025)</a> by Atharva Soundankar on Kaggle.')
+    HTML('Data taken from <a href="https://www.kaggle.com/datasets/atharvasoundankar/gen-ai-misinformation-detection-datase-20242025"target="_blank">
+      Gen AI Misinformation Detection Data (2024–2025)</a> by Atharva Soundankar on Kaggle.')
 })
   
   # engagement with content column chart
@@ -628,6 +647,13 @@ server <- function(input, output, session) {
       icon = icon("thumbs-up"),
       color = "green"
     )
+  })
+
+  # final presentation and report
+  output$linked_text <- renderUI({
+    HTML('Take a look at the <a href="https://kpwong26.github.io/dsda1010-final-project/final-project-report.html" target="_blank">
+      final project report</a> and <a href="https://kpwong26.github.io/dsda1010-final-project/final-project-presentation.html#/title-slide" target="_blank">
+      presentation</a>!')
   })
 
 }
