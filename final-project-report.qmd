@@ -1,9 +1,10 @@
 ---
-title: "Generative AI Misinformation Research Final"
+title: "Generative AI Misinformation Research Final Report"
 subtitle: "STAT/DSDA 1010; Data Science and Society Using R"
 author: "Karissa Wong"
 format:
   html:
+    self-contained: true
     toc: true
     number-sections: true
 ---
