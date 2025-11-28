@@ -75,14 +75,16 @@ prop.test(x = c(75, 80), n = c(157, 174), alternative = "greater")
 **Not enough evidence** to conclude there is a statistically significant difference given a significance level (α) of 0.05.
 
 ## Attributes of Misinformation Detection
-- Each boxplot shows the **summary distribution** of each attribute (token count, toxicity, sentiment, and readability score) in posts with **GPT-like** and **human** model signatures
+- Each boxplot shows the **summary distribution** of each attribute in posts with **GPT-like** and **human** model signatures
+    - **Attributes:** Readability score, toxicity score, sentiment score, token count
 - A **two sample T-test** was conducted for each attribute to see if there is a significant difference between the **means** of the GPT-like and human post group
 
 ## Readability Score
 - **GPT-like group:** Mean = 54.96, Standard deviation = 54.96
 - **Human group:** Mean = 55.29, Standard deviation = 14.74
-- **Null Hypothesis:** No difference between the means of the GPT-like and human group
-- **Alternative Hypothesis:** Difference between the means
+- **Two-sample T-test:**
+    - **Null Hypothesis:** No difference between the means of the GPT-like and human group
+    - **Alternative Hypothesis:** Difference between the means
 
 ## Results {.smaller}
 
@@ -106,8 +108,9 @@ t.test(ai_readability, human_readability)
 ## Sentiment Score
 - **GPT-like group:** Mean = -0.02, Standard deviation = 0.57
 - **Human group:** Mean = 0.02, Standard deviation = 0.59
-- **Null Hypothesis:** No difference between the means of the GPT-like and human group
-- **Alternative Hypothesis:** Difference between the means
+- **Two-sample T-test:**
+    - **Null Hypothesis:** No difference between the means of the GPT-like and human group
+    - **Alternative Hypothesis:** Difference between the means
 
 ## Results {.smaller}
 
@@ -131,8 +134,9 @@ t.test(ai_sentiment, human_sentiment)
 ## Toxicity Score
 - **GPT-like group:** Mean = 0.51, Standard deviation = 0.31
 - **Human group:** Mean = 0.50, Standard deviation = 0.28
-- **Null Hypothesis:** No difference between the means of the GPT-like and human group
-- **Alternative Hypothesis:** Difference between the means
+- **Two-sample T-test:**
+    - **Null Hypothesis:** No difference between the means of the GPT-like and human group
+    - **Alternative Hypothesis:** Difference between the means
 
 ## Results {.smaller}
 
@@ -156,8 +160,9 @@ t.test(ai_toxic, human_toxic)
 ## Token Count
 - **GPT-like group:** Mean = 34.22, Standard deviation = 20.43
 - **Human group:** Mean = 35.84, Standard deviation = 19.60
-- **Null Hypothesis:** No difference between the means of the GPT-like and human group
-- **Alternative Hypothesis:** Difference between the means
+- **Two-sample T-test:**
+    - **Null Hypothesis:** No difference between the means of the GPT-like and human group
+    - **Alternative Hypothesis:** Difference between the means
 
 ## Results {.smaller}
 
@@ -177,3 +182,15 @@ t.test(ai_token, human_token)
 ```
 
 **Not enough evidence** to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+
+# Conclusion
+## Results of the Analysis
+- No **significant difference** between amount of misinformation each model produces
+- Not enough evidence to show that **average difference** between attributes of AI and human posts is significantly different
+- **No definite factor** that causes text to be marked as GPT-like writing
+
+## Takeaways
+- **Narrowed gap** between AI and human writing
+- Crucial to understand how to identify AI content and misinformation
+    - Recognize formulaic structure and repeated phrases
+    - Assess credibilty of sources
