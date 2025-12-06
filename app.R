@@ -651,7 +651,7 @@ server <- function(input, output, session) {
 
   # final presentation and report
   output$linked_text <- renderUI({
-    HTML('Take a look at the <a href="https://kpwong26.github.io/dsda1010-final-project/final-project-report.html" target="_blank">
+    HTML('Take a look at the <a href="https://kpwong26.github.io/dsda1010-final-project/final-project-report.pdf" target="_blank">
       final project report</a> and <a href="https://kpwong26.github.io/dsda1010-final-project/final-project-presentation.html#/title-slide" target="_blank">
       presentation</a>!')
   })
