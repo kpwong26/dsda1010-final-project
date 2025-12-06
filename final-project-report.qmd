@@ -1,18 +1,22 @@
 ---
-title: "Generative AI Misinformation Research Final Report"
-subtitle: "STAT/DSDA 1010; Data Science and Society Using R"
-author: "Karissa Wong"
 format:
-  html:
+  pdf:
+    fontsize: 10pt
+    geometry: "margin=1in"
+    linestretch: 1
     self-contained: true
-    toc: true
     number-sections: true
+    title-block-style: none
 ---
 
 ```{r, echo = FALSE, message = FALSE}
 library(tidyverse)
 gen_ai <- read.csv("generative_ai_misinformation_dataset.csv")
 ```
+
+# Generative AI Misinformation Research Final Report {.unnumbered}
+## STAT/DSDA 1010; Data Science and Society Using R {.unnumbered}
+**Karissa Wong**
 
 # Introduction
 ## Overview of Data
@@ -27,7 +31,7 @@ into time, location, author, attributes, credibility, and misinformation.
 
 ### Target Variables
 For the purpose of this project, the variables that will be focused on are
-**country, city, token count, readability score, sentiment score, toxicity score,model signature, engagement,**
+**country, city, token count, readability score, sentiment score, toxicity score, model signature, engagement,**
 and **if the post is misinformation or not.** A brief explanation of each variables can be found below:
 
 * **Country:** The country where the post originated.
@@ -70,6 +74,9 @@ chart, showing the number of misinformation and authentic information posts by m
 or all three factors. 
 
 ### Findings
+::: {layout-ncol=1 fig-post="H"}
+![AI Posts by Country](countries-ai-posts.png){width=75% #fig-country fig-subcap="AI Posts by Country"}
+:::
 Based on this sample of data, there is **not a significant difference in the number of AI posts produced by**
 **each country.** However, it is worth noting that every post originated from metropolitan areas, aligning
 with the trend of larger cities adopting AI because of its ability to provide more funding and research.
@@ -80,10 +87,20 @@ In the **“Engagement with Content”** tab, the column chart shows the **relat
 and city to compare engagement with specific model signatures and engagement across countries. 
 
 ### Findings
+::: {layout-ncol=2 fig-pos="H"}
+![Engagement with Human Content](human-engagement.png){width=75% #fig-human fig-subcap="Engagement with Human Content"}
+
+![Engagement with AI Content](ai-engagement.png){width=75% #fig-ai fig-subcap="Engagement with AI Content"}
+:::
 The column chart shows that people overall **engage with more human content** (919,439 cases of engagement)
 than AI content (849,052 cases of engagement), showing the continued dominance of human content in social media.
 
 ## Misinformation Detection Frequency
+::: {layout-ncol=2 fig-pos="H"}
+![Misinformation in Human Posts](human-misinformation.png){width=75% #fig-human fig-subcap="Misinformation in Human Posts"}
+
+![Misinformation in AI Posts](ai-misinformation.png){width=75% #fig-ai fig-subcap="Misinformation in AI Posts"}
+:::
 In the **“Misinformation Detection Frequency”** tab, the frequency bar chart **compares the count of**
 **misinformation content and authentic content by model signature.** In a sample of 157 GPT-like posts and
 174 human posts, the amount of **misinformation posts were slightly higher in human posts** (p~1~ = 54%)
@@ -95,15 +112,18 @@ he **null hypothesis** was there is no difference between the amount of misinfor
 signature and the **alternative hypothesis** was the proportion of misinformation in GPT-like posts is
 greater than in human posts.
 
-```{r}
+```{r, echo = FALSE}
 # two-proportion z-test
 prop.test(x = c(75, 80), n = c(157, 174), alternative = "greater")
 ```
 
 The test produced a **p-value of around 0.4144**, meaning that there is not enough evidence to
-conclude a statistically significant difference given a significance level (α) of 0.05.
+conclude a statistically significant difference given a significance level of 0.05.
 
 ## Attributes of Misinformation Detection
+::: {layout-ncol=1 fig-post="H"}
+![Post Attributes](attributes.png){width=65% #fig-attributes fig-subcap="Post Attributes"}
+:::
 In the **“Attributes of Misinformation Detection”** tab, each boxplot shows the
 **summary distribution of each attribute** in posts with GPT-like and human model signatures.
 The summary statistics show the quartiles, median, mean, minimum, maximum, and spread of each
@@ -117,7 +137,7 @@ GPT-like and human group and the **alternative hypothesis** was there is a diffe
 The mean and standard deviation for the **GPT-like** group was 54.96 and 14.95, respectively. The mean
 and standard deviation for the **human** group was 55.29 and 14.74, respectively.
 
-```{r}
+```{r, echo = FALSE}
 # two-sample t-test for readability score
 ai_readability <- gen_ai %>%
   filter(model_signature == "GPT-like") %>%
@@ -131,7 +151,7 @@ t.test(ai_readability, human_readability)
 ```
 
 The test produced a **p-value of around 0.8428**, meaning that there is not enough evidence to conclude
-there is a statistically significant difference given a significance level (α) of 0.05.
+there is a statistically significant difference given a significance level of 0.05.
 
 ### Sentiment Score Findings
 For the sentiment score, the **null hypothesis** was there is no difference between the means of the GPT-like
@@ -139,7 +159,7 @@ and human group and the **alternative hypothesis** was there is a difference bet
 standard deviation for the **GPT-like** group was -0.02 and 0.57, respectively. The mean and standard deviation
 for the **human** group was 0.02 and 0.59, respectively.
 
-```{r}
+```{r, echo = FALSE}
 # two-sample t-test for sentiment score
 ai_sentiment <- gen_ai %>%
   filter(model_signature == "GPT-like") %>%
@@ -153,7 +173,7 @@ t.test(ai_sentiment, human_sentiment)
 ```
 
 The conclusions of this test was a **p-value of around 0.4827**, meaning that there is not enough evidence to
-conclude there is a statistically significant difference given a significance level (α) of 0.05.
+conclude there is a statistically significant difference given a significance level of 0.05.
 
 ### Toxicity Score Findings
 For the toxicity score, the **null hypothesis** was there is no difference between the means of the GPT-like
@@ -161,7 +181,7 @@ and human group and the **alternative hypothesis** was there is a difference bet
 standard deviation for the **GPT-like** group was 0.51 and 0.31, respectively. The mean and standard deviation
 for the **human** group was 0.50 and 0.28, respectively.
 
-```{r}
+```{r, echo = FALSE}
 # two-sample t-test for toxicity score
 ai_toxic <- gen_ai %>%
   filter(model_signature == "GPT-like") %>%
@@ -175,7 +195,7 @@ t.test(ai_toxic, human_toxic)
 ```
 
 The conclusions of this test was a **p-value of around 0.6204**, meaning that there is not enough evidence
-to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+to conclude there is a statistically significant difference given a significance level of 0.05.
 
 ### Token Count Findings
 For the token count, the **null hypothesis** was there is no difference between the means of the GPT-like
@@ -183,7 +203,7 @@ and human group and the **alternative hypothesis** was there is a difference in 
 deviation for the **GPT-like** group was 34.22 and 20.43, respectively. The mean and standard deviation for
 the **human** group was 35.84 and 19.60, respectively.
 
-```{r}
+```{r, echo = FALSE}
 # two-sample t-test for token count
 ai_token <- gen_ai %>%
   filter(model_signature == "GPT-like") %>%
@@ -197,7 +217,7 @@ t.test(ai_token, human_token)
 ```
 
 The conclusions of this test was a **p-value of around 0.461**, meaning that there is not enough evidence
-to conclude there is a statistically significant difference given a significance level (α) of 0.05.
+to conclude there is a statistically significant difference given a significance level of 0.05.
 
 # Conclusion
 Based on the analysis of this dataset, there is **no significant difference** between AI and human writing
